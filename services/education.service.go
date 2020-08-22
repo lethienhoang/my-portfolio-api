@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"my-portfolio-api/interfaces"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/viewmodels"
 
@@ -12,8 +11,6 @@ import (
 type EducationService struct {
 	educationRepo repositories.EducationRepository
 }
-
-var _ interfaces.IEducationService = &EducationService
 
 func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
 	eduVm := []viewmodels.EducationVM{}

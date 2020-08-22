@@ -2,7 +2,6 @@ package services
 
 import (
 	"errors"
-	"my-portfolio-api/interfaces"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/viewmodels"
 
@@ -12,8 +11,6 @@ import (
 type SkillService struct {
 	skillRepo repositories.SkillRepository
 }
-
-var _ interfaces.ISkillService = &SkillService{}
 
 func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, error) {
 	skillVm := []viewmodels.SkillVM{}

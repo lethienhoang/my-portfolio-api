@@ -2,7 +2,6 @@ package repositories
 
 import (
 	"my-portfolio-api/infrastructures"
-	"my-portfolio-api/interfaces"
 	"my-portfolio-api/models"
 
 	"github.com/jinzhu/gorm"
@@ -17,8 +16,6 @@ func NewEducationRepository() *EducationRepository {
 	var dbContext infrastructures.DbContext
 	return &EducationRepository{dbContext.GetDbContext()}
 }
-
-var _ interfaces.IEducationRepository = &EducationRepository{}
 
 func (repo *EducationRepository) Update(id uuid.UUID, model *models.EducationEntity) (*models.EducationEntity, error) {
 	err := repo.db.Model(&model).Where("Id=?", id).Update(&model).Error
