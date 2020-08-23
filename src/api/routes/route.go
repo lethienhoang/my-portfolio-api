@@ -9,10 +9,12 @@ type Route struct {
 	AuthRequired bool
 }
 
+// Load collect all routes
 func Load() []Route {
 
 }
 
+// SetupRoutesWithMiddleware setup middleware for routes or otherwise
 func SetupRoutesWithMiddleware(g *gin.Engine) {
 	for _, route := range Load() {
 		if route.AuthRequired {

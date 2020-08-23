@@ -8,14 +8,17 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// SkillRepository is the struct for kill bussiness
 type SkillRepository struct {
 	db *gorm.DB
 }
 
+// NewProfileRepository is initialize, passing database connection and return a new repo with connection
 func NewSkillRepository(db *gorm.DB) *SkillRepository {
 	return &SkillRepository{db}
 }
 
+// Update updates a Skill from the DB and returns a new Skill updated or an error
 func (repo *SkillRepository) Update(id uuid.UUID, model *models.SkillEntity) (*models.SkillEntity, error) {
 	var err error
 	done := make(chan bool)
@@ -39,6 +42,7 @@ func (repo *SkillRepository) Update(id uuid.UUID, model *models.SkillEntity) (*m
 	return nil, err
 }
 
+// Insert returns a new Skill created or an error
 func (repo *SkillRepository) Insert(model *models.SkillEntity) (*models.SkillEntity, error) {
 	var err error
 	done := make(chan bool)
@@ -62,6 +66,7 @@ func (repo *SkillRepository) Insert(model *models.SkillEntity) (*models.SkillEnt
 	return nil, err
 }
 
+// GetByType returns Skill records base on type
 func (repo *SkillRepository) GetByType(skillType string) ([]models.SkillEntity, error) {
 	var err error
 	var model []models.SkillEntity
@@ -86,6 +91,7 @@ func (repo *SkillRepository) GetByType(skillType string) ([]models.SkillEntity, 
 	return nil, err
 }
 
+// GetByManufacturer returns Skill records base on manufacturer
 func (repo *SkillRepository) GetByManufacturer(manufacturerType string) ([]models.SkillEntity, error) {
 	var err error
 	var model []models.SkillEntity
@@ -110,6 +116,7 @@ func (repo *SkillRepository) GetByManufacturer(manufacturerType string) ([]model
 	return nil, err
 }
 
+// GetAll returns all the Skill from the DB
 func (repo *SkillRepository) GetAll() ([]models.SkillEntity, error) {
 	var err error
 	var model []models.SkillEntity
@@ -134,7 +141,8 @@ func (repo *SkillRepository) GetAll() ([]models.SkillEntity, error) {
 	return nil, err
 }
 
-func (repo *SkillRepository) GetById(id uuid.UUID) (*models.SkillEntity, error) {
+// GetByID returns only one the Profile base on id from the DB
+func (repo *SkillRepository) GetByID(id uuid.UUID) (*models.SkillEntity, error) {
 	var err error
 	var model models.SkillEntity
 	done := make(chan bool)

@@ -8,15 +8,21 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+// SkillService respresents skill repo, service
 type SkillService struct {
 	skillRepo repositories.SkillRepository
 }
 
+// GetSkillByType is getting data base on type
+// type :
+// * - cloud
+// * - back end
+// * - font end
 func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, error) {
-	skillVm := []viewmodels.SkillVM{}
+	skillVM := []viewmodels.SkillVM{}
 
 	if skillType == "" {
-		return skillVm, errors.New("skill type is requried")
+		return skillVM, errors.New("skill type is requried")
 	}
 
 	entity, err := sv.skillRepo.GetByType(skillType)
@@ -28,13 +34,16 @@ func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, 
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVm, &entity)
+	copier.Copy(&skillVM, &entity)
 
-	return skillVm, nil
+	return skillVM, nil
 }
 
+// GetSkillsByManufacturer is getting data base on manufacturer
+// * - microsoft
+// * - Google
 func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]viewmodels.SkillVM, error) {
-	skillVm := []viewmodels.SkillVM{}
+	skillVM := []viewmodels.SkillVM{}
 
 	entity, err := sv.skillRepo.GetByManufacturer(manufacturerType)
 	if err != nil {
@@ -45,23 +54,24 @@ func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]view
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVm, &entity)
+	copier.Copy(&skillVM, &entity)
 
-	return skillVm, nil
+	return skillVM, nil
 }
 
+// GetSkills is getting all certificate in db
 func (sv *SkillService) GetSkills() ([]viewmodels.SkillVM, error) {
 	entity, err := sv.skillRepo.GetAll()
 	if err != nil {
 		return nil, err
 	}
 
-	skillVm := []viewmodels.SkillVM{}
+	skillVM := []viewmodels.SkillVM{}
 	if len(entity) == 0 {
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVm, &entity)
+	copier.Copy(&skillVM, &entity)
 
-	return skillVm, nil
+	return skillVM, nil
 }

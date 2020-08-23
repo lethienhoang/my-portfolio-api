@@ -8,12 +8,14 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+// EducationService respresents certificate repo, service
 type EducationService struct {
 	educationRepo repositories.EducationRepository
 }
 
+// GetEducations is getting all certificate in db
 func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
-	eduVm := []viewmodels.EducationVM{}
+	eduVM := []viewmodels.EducationVM{}
 
 	entity, err := sv.educationRepo.GetAll()
 	if err != nil {
@@ -24,7 +26,7 @@ func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
 		return nil, errors.New("education is not found")
 	}
 
-	copier.Copy(&eduVm, &entity)
+	copier.Copy(&eduVM, &entity)
 
-	return eduVm, nil
+	return eduVM, nil
 }

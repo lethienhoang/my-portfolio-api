@@ -22,3 +22,7 @@ func (base *BaseEntity) BeforeSave() {
 	base.CreatedAt = time.Now()
 	base.UpdatedAt = time.Now()
 }
+
+func (base *BaseEntity) BeforeUpdate() {
+	base.UpdatedAt = time.Now()
+}

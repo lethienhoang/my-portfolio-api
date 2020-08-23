@@ -6,7 +6,7 @@ import (
 
 type SkillVM struct {
 	ID           uuid.UUID
-	SkillName    string
+	Name         string
 	Level        int
 	Experiences  float32
 	Manufacturer string

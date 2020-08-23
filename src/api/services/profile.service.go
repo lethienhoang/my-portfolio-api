@@ -7,19 +7,21 @@ import (
 	"github.com/jinzhu/copier"
 )
 
+// ProfileService respresents certificate repo, service
 type ProfileService struct {
 	profileRepo repositories.ProfileRepository
 }
 
+// GetProfile is getting only one
 func (sv *ProfileService) GetProfile() (*viewmodels.ProfileVM, error) {
-	profileVm := viewmodels.ProfileVM{}
+	profileVM := viewmodels.ProfileVM{}
 
 	entity, err := sv.profileRepo.Get()
 	if err != nil {
 		return nil, err
 	}
 
-	copier.Copy(&profileVm, &entity)
+	copier.Copy(&profileVM, &entity)
 
-	return &profileVm, nil
+	return &profileVM, nil
 }

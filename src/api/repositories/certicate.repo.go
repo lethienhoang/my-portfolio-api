@@ -8,14 +8,17 @@ import (
 	uuid "github.com/satori/go.uuid"
 )
 
+// CertificateRepository is the struct for Certificate bussiness
 type CertificateRepository struct {
 	db *gorm.DB
 }
 
+// NewCertificateRepository is initialize, passing database connection and return a new repo with connection
 func NewCertificateRepository(db *gorm.DB) *CertificateRepository {
 	return &CertificateRepository{db}
 }
 
+// Update updates a Certificate from the DB and returns a new Certificate updated or an error
 func (repo *CertificateRepository) Update(id uuid.UUID, model *models.CertificateEntity) (*models.CertificateEntity, error) {
 	var err error
 	done := make(chan bool)
@@ -39,6 +42,7 @@ func (repo *CertificateRepository) Update(id uuid.UUID, model *models.Certificat
 	return nil, err
 }
 
+// Insert returns a new Certificate created or an error
 func (repo *CertificateRepository) Insert(model *models.CertificateEntity) (*models.CertificateEntity, error) {
 	var err error
 	done := make(chan bool)
@@ -62,6 +66,7 @@ func (repo *CertificateRepository) Insert(model *models.CertificateEntity) (*mod
 	return nil, err
 }
 
+// GetAll returns all the Certificate from the DB
 func (repo *CertificateRepository) GetAll() ([]models.CertificateEntity, error) {
 	var err error
 	var model []models.CertificateEntity
