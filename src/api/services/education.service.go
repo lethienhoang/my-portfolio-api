@@ -10,12 +10,19 @@ import (
 
 // EducationService respresents certificate repo, service
 type EducationService struct {
-	educationRepo repositories.EducationRepository
+	educationRepo *repositories.EducationRepository
+}
+
+// NewEducationService is initialize
+func NewEducationService(newRepo *repositories.EducationRepository) *EducationService {
+	return &EducationService{
+		educationRepo: newRepo,
+	}
 }
 
 // GetEducations is getting all certificate in db
 func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
-	eduVM := []viewmodels.EducationVM{}
+	var eduVM []viewmodels.EducationVM
 
 	entity, err := sv.educationRepo.GetAll()
 	if err != nil {
@@ -23,7 +30,7 @@ func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
 	}
 
 	if len(entity) == 0 {
-		return nil, errors.New("education is not found")
+		return eduVM, errors.New("education is not found")
 	}
 
 	copier.Copy(&eduVM, &entity)

@@ -7,7 +7,7 @@ import (
 )
 
 // OK represents a response successfully
-func OK(r *gin.Context, statusCode int, data interface{}) {
+func OK(r *gin.Context, data interface{}) {
 	r.JSON(http.StatusOK, data)
 }
 

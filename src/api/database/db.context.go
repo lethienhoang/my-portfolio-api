@@ -7,10 +7,12 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
+// DbContext is the struct
 type DbContext struct {
 	db *gorm.DB
 }
 
+// NewDbContext is initialize, passing db params and return db
 func NewDbContext(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) (*DbContext, error) {
 	DBURL := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbUser, DbName, DbPassword)
 	db, err := gorm.Open(Dbdriver, DBURL)
@@ -26,12 +28,12 @@ func NewDbContext(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) (
 	}, nil
 }
 
-// GetDbContext is context of init db conenction
+// GetDbContext is context of db conenction
 func (d *DbContext) GetDbContext() *gorm.DB {
 	return d.db
 }
 
-// Close is closing connection to db
+// Close closes connection to db
 func (d *DbContext) Close() error {
 	return d.db.Close()
 }

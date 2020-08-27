@@ -10,7 +10,14 @@ import (
 
 // SkillService respresents skill repo, service
 type SkillService struct {
-	skillRepo repositories.SkillRepository
+	skillRepo *repositories.SkillRepository
+}
+
+// NewSkillService is initialize
+func NewSkillService(newRepo *repositories.SkillRepository) *SkillService {
+	return &SkillService{
+		skillRepo: newRepo,
+	}
 }
 
 // GetSkillByType is getting data base on type
@@ -43,7 +50,7 @@ func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, 
 // * - microsoft
 // * - Google
 func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]viewmodels.SkillVM, error) {
-	skillVM := []viewmodels.SkillVM{}
+	var skillVM []viewmodels.SkillVM
 
 	entity, err := sv.skillRepo.GetByManufacturer(manufacturerType)
 	if err != nil {

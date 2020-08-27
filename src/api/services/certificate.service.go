@@ -10,12 +10,19 @@ import (
 
 // CertificateService respresents certificate repo, service
 type CertificateService struct {
-	certificateRepo repositories.CertificateRepository
+	certificateRepo *repositories.CertificateRepository
+}
+
+// NewCertificateService is initialize
+func NewCertificateService(newRepo *repositories.CertificateRepository) *CertificateService {
+	return &CertificateService{
+		certificateRepo: newRepo,
+	}
 }
 
 // GetCertificates is getting all certificate in db
 func (sv *CertificateService) GetCertificates() ([]viewmodels.CertificateVM, error) {
-	cerVM := []viewmodels.CertificateVM{}
+	var cerVM []viewmodels.CertificateVM
 
 	entity, err := sv.certificateRepo.GetAll()
 	if err != nil {
