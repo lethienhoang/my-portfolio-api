@@ -1,7 +1,8 @@
 package database
 
 import (
-	"fmt"
+	"log"
+	"my-portfolio-api/config"
 	"my-portfolio-api/models"
 
 	"github.com/jinzhu/gorm"
@@ -12,23 +13,28 @@ type DbContext struct {
 	db *gorm.DB
 }
 
-// NewDbContext is initialize, passing db params and return db
-func NewDbContext(Dbdriver, DbUser, DbPassword, DbPort, DbHost, DbName string) (*DbContext, error) {
-	DBURL := fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", DbHost, DbUser, DbName, DbPassword)
-	db, err := gorm.Open(Dbdriver, DBURL)
-
+// GetDbContext connect database
+func ConnectDb() (*DbContext, error) {
+	db, err := gorm.Open(config.DBDRIVER, config.DBURL)
 	if err != nil {
+		log.Fatal(err)
 		return nil, err
 	}
 
 	db.LogMode(true)
+
+	err = Automigrate(db)
+	if err != nil {
+		log.Fatal(err)
+		return nil, err
+	}
 
 	return &DbContext{
 		db: db,
 	}, nil
 }
 
-// GetDbContext is context of db conenction
+// GetDbContext gets gorm.DB
 func (d *DbContext) GetDbContext() *gorm.DB {
 	return d.db
 }
@@ -39,6 +45,6 @@ func (d *DbContext) Close() error {
 }
 
 // Automigrate migariton model schema
-func (d *DbContext) Automigrate() error {
-	return d.db.AutoMigrate(&models.SkillEntity{}, &models.ProfileEntity{}, &models.EducationEntity{}, &models.CertificateEntity{}).Error
+func Automigrate(db *gorm.DB) error {
+	return db.AutoMigrate(&models.SkillEntity{}, &models.ProfileEntity{}, &models.EducationEntity{}, &models.CertificateEntity{}).Error
 }
