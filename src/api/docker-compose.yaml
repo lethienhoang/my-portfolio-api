@@ -23,9 +23,11 @@ services:
             - HTTP_PASSWORD=qwerty
         ports: 
             - "8081:8081"
+        networks: 
+            - servicesnet
         depends_on: 
             - redis
-    # portfolio-api-prod:
+    # portfolio-api-dev:
     #     build: 
     #         context: ./dockers/go/
     #         target: dev
