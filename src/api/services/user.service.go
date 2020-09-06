@@ -5,6 +5,8 @@ import (
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/utils/auth"
 	"my-portfolio-api/utils/security"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 type UserService struct {
@@ -45,14 +47,14 @@ func (sv *UserService) SignIn(email, password string) (string, error) {
 	return token.AccessToken, nil
 }
 
-func (sv *UserService) SignOut(userid string) error {
+func (sv *UserService) SignOut(userid uuid.UUID) error {
 	var err error
 
 	if userid == "" {
 		return errors.New("Email is required")
 	}
 
-	if err = DeleteTokenFromRedis(userid); err != nil {
+	if err = DeleteTokenFromRedis(userid.String()); err != nil {
 		return err
 	}
 

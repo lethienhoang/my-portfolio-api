@@ -1,10 +1,11 @@
 package controllers
 
 import (
+	"context"
+	"my-portfolio-api/utils/auth"
 	"my-portfolio-api/services"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/database"
-	"my-portfolio-api/models"
 	"my-portfolio-api/utils/responses"
 	"net/http"
 
@@ -34,19 +35,18 @@ func SignIn(c *gin.Context) {
 }
 
 func SignOut(c *gin.Context) {
+	claim := auth.ClaimFromContext(c)
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err.Error()
 	}
 
 	defer dbContext.Close()
-
-	email,_ := c.GetPostForm("email")
 	
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
 
-	token, err := service.SignOut(email)
+	token, err := service.SignOut(claim.UserID)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err.Error())
 	}

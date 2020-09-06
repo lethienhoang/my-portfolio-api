@@ -1,16 +1,20 @@
 version: '3'
 services: 
     redis:
-        image: redis:4.0.5-alpine
+        image: redis:6.0.7-alpine
+        container_name: redis
+        build: 
+            context: ./dockers/redis/
+            dockerfile: Dockerfile
         ports: 
-            - 6379:6379
+            - "6379:6379"
         networks: 
             - servicesnet
         # command: ["redis-server", "--appendonly", "yes", "/usr/local/etc/redis/redis.conf"]
-        command: ["redis-server", "--appendonly", "yes"]
+        # command: ["redis-server", "--appendonly", "yes"]
         volumes: 
-            - redis-data:/data
-            # - ./dockers/redis/redis.conf:/usr/local/etc/redis/redis.conf
+            - ./dockers/redis/redis.conf:/usr/local/etc/redis/redis.conf
+            - redis-data:/usr/local/etc/redis
     redis-commander:
         image: rediscommander/redis-commander:latest
         environment: 
@@ -18,7 +22,7 @@ services:
             - HTTP_USER=root
             - HTTP_PASSWORD=qwerty
         ports: 
-            - 8081:8081
+            - "8081:8081"
         depends_on: 
             - redis
     # portfolio-api-prod:
@@ -26,6 +30,7 @@ services:
     #         context: ./dockers/go/
     #         target: dev
     #         container_name: portfolio-api-prod
+    #         dockerfile: Dockerfile
     #     volumes: 
     #         - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
     #     env_file: 

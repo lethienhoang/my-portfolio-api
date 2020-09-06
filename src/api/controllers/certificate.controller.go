@@ -1,33 +1,31 @@
 package controllers
 
 import (
+	"my-portfolio-api/database"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/services"
 	"my-portfolio-api/utils/responses"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
-type CertificateController struct {
-	certificateService *services.CertificateService
-}
+// GetAll from the DB
+func GetCertificates(c *gin.Context) {
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+	}
 
-func NewCertificateController(db *gorm.DB) *CertificateController {
-	repo := repositories.NewCertificateRepository(db)
+	defer dbContext.Close()
+
+	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)
 
-	return &CertificateController{
-		certificateService: service,
-	}
-}
-
-func (controller *CertificateController) GetAll(c *gin.Context) {
-	certificates, err := controller.certificateService.GetCertificates()
+	results, err := service.GetCertificates()
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
 	}
 
-	responses.OK(c, certificates)
+	responses.OK(c, results)
 }

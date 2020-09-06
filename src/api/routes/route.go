@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"my-portfolio-api/middlewares"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 )
@@ -13,11 +14,11 @@ type Route struct {
 }
 
 // Load collect all routes
-func Load(db *gorm.DB) []Route {
-	skillRoutes := GetSkillRoutes(db)
-	profileRotues := GetProfileRoutes(db)
-	educationRotues := GetEducationRoutes(db)
-	certificateRotues := GetCertificateRoutes(db)
+func Load() []Route {
+	skillRoutes := GetSkillRoutes()
+	profileRotues := GetProfileRoutes()
+	educationRotues := GetEducationRoutes()
+	certificateRotues := GetCertificateRoutes()
 
 	routes := skillRoutes
 	routes = append(routes, profileRotues...)
@@ -28,12 +29,15 @@ func Load(db *gorm.DB) []Route {
 }
 
 // SetupRoutesWithMiddleware setup middleware for routes or otherwise
-func SetupRoutesWithMiddleware(db *gorm.DB, g *gin.Engine) {
-	for _, route := range Load(db) {
+func SetupRoutesWithMiddleware(g *gin.Engine) {
+	for _, route := range Load() {
+		g.Use(middlewares.LoggerMiddleware)
+		g.Use(middlewares.JSONMiddlware)
+
 		if route.AuthRequired {
 			authorized := g.Group("/")
 			// define authen here
-			authorized.Use(..) {
+			authorized.Use(middlewares.AuthMiddlware) {
 				authorized.Handle(route.method, route.URI, route.Handler)
 			}
 		} 

@@ -54,8 +54,8 @@ COPY --from=build-stage /api .
 
 # Create a new group and user, recursively change directory ownership, then allow the binary to be executed
 RUN addgroup gopher && adduser -D -G gopher gopher \
-    && chown -R gopher:gopher /api/main && \
-    chmod +x ./main
+    && chown -R gopher:gopher /api/out && \
+    chmod +x ./out
 
 USER gopher
 EXPOSE 4000

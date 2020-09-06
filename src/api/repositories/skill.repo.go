@@ -142,9 +142,9 @@ func (repo *SkillRepository) GetAll() ([]models.SkillEntity, error) {
 }
 
 // GetByID returns only one the Profile base on id from the DB
-func (repo *SkillRepository) GetByID(id uuid.UUID) (*models.SkillEntity, error) {
+func (repo *SkillRepository) GetByID(id uuid.UUID) (models.SkillEntity, error) {
 	var err error
-	var model models.SkillEntity
+	model := models.SkillEntity{}
 	done := make(chan bool)
 
 	go func(ch chan<- bool) {
@@ -160,8 +160,8 @@ func (repo *SkillRepository) GetByID(id uuid.UUID) (*models.SkillEntity, error) 
 	}(done)
 
 	if channels.OK(done) {
-		return &model, nil
+		return model, nil
 	}
 
-	return nil, err
+	return model, err
 }

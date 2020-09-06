@@ -1,21 +1,31 @@
 package controllers
 
 import (
+	"my-portfolio-api/database"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/services"
+	"my-portfolio-api/utils/responses"
+	"net/http"
 
-	"github.com/jinzhu/gorm"
+	"github.com/gin-gonic/gin"
 )
 
-type EducationController struct {
-	educationService *services.EducationService
-}
+// GetAll from the DB
+func GetEducations(c *gin.Context) {
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+	}
 
-func NewEducationController(db *gorm.DB) *EducationController {
-	repo := repositories.NewEducationRepository(db)
+	defer dbContext.Close()
+
+	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
 
-	return &EducationController{
-		educationService: service,
+	results, err := service.GetEducations()
+	if err != nil {
+		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
 	}
+
+	responses.OK(c, results)
 }

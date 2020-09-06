@@ -1,21 +1,35 @@
 package controllers
 
 import (
+	"my-portfolio-api/database"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/services"
+	"my-portfolio-api/utils/responses"
+	"net/http"
 
-	"github.com/jinzhu/gorm"
+	"github.com/gin-gonic/gin"
 )
 
 type ProfileController struct {
 	profileService *services.ProfileService
 }
 
-func NewProfileController(db *gorm.DB) *ProfileController {
-	repo := repositories.NewProfileRepository(db)
+// GetProfile from the DB
+func GetProfile(c *gin.Context) {
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
 
-	return &ProfileController{
-		profileService: service,
+	results, err := service.GetProfile()
+	if err != nil {
+		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
 	}
+
+	responses.OK(c, results)
 }

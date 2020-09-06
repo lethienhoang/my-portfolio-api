@@ -13,18 +13,18 @@ func StoreTokenToRedis(userid uuid.UUID, token *models.Token) error {
 	at := time.Unix(token.AtExpires, 0)
 	now := time.Now()
 
-	status := redisserver.REDISCLIENT.Set(token.AccessUUID, userid, at.Sub(now))
-	if status.Err != nil {
-		return status.Err()
+	_, err := redisserver.REDISCLIENT.Set(token.AccessUUID, userid.String(), at.Sub(now)).Result()
+	if err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func DeleteTokenFromRedis(userid string) error {
-	deleted := redisserver.REDISCLIENT.Del(userid)
-	if deleted.Err != nil {
-		return deleted.Err()
+func DeleteTokenFromRedis(userid uuid.UUID) error {
+	_, err := redisserver.REDISCLIENT.Del(userid.String()).Result()
+	if err != nil {
+		return err
 	}
 
 	return nil

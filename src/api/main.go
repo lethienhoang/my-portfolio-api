@@ -2,12 +2,12 @@ package main
 
 import (
 	"my-portfolio-api/config"
-	"my-portfolio-api/utils/redis_server"
+	"my-portfolio-api/utils/redisserver"
 )
 
 func init() {
 	config.Load()
-	redis_server.Load()
+	redisserver.Load()
 }
 
 func Run() {
