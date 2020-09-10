@@ -16,6 +16,7 @@ var (
 	DBDRIVER  = ""
 	ISSUER    = ""
 	REDIS_DSN = ""
+	PASSWRORD = ""
 )
 
 // Load the env
@@ -42,4 +43,5 @@ func Load() {
 	}
 
 	REDIS_DSN = os.Getenv("REDIS_DSN")
+	PASSWRORD = os.Getenv("REDIS_DSN_PASSWRORD")
 }

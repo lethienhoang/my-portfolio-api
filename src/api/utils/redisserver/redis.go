@@ -17,7 +17,9 @@ func Load() {
 	}
 
 	REDISCLIENT = redis.NewClient(&redis.Options{
-		Addr: config.REDIS_DSN,
+		Addr:       config.REDIS_DSN,
+		Password:   config.PASSWRORD,
+		MaxRetries: 2,
 	})
 
 	_, err := REDISCLIENT.Ping().Result()

@@ -2,47 +2,52 @@ package routes
 
 import (
 	"my-portfolio-api/middlewares"
+
 	"github.com/gin-gonic/gin"
-	"github.com/jinzhu/gorm"
 )
 
+// Route contain route fields
 type Route struct {
 	URI          string
-	method       string
-	Handler      *gin.HandlerFunc
+	Method       string
+	Handler      gin.HandlerFunc
 	AuthRequired bool
 }
 
 // Load collect all routes
 func Load() []Route {
-	skillRoutes := GetSkillRoutes()
-	profileRotues := GetProfileRoutes()
-	educationRotues := GetEducationRoutes()
-	certificateRotues := GetCertificateRoutes()
+	skillRoutes := SkillRoutes()
+	profileRoutes := ProfileRoutes()
+	educationRoutes := EducationRoutes()
+	certificateRoutes := CertificateRoutes()
+	userRoutes := UserRoutes()
+	healthCheckRoutes := HealthCheckRoutes()
 
-	routes := skillRoutes
-	routes = append(routes, profileRotues...)
-	routes = append(routes, educationRotues...)
-	routes = append(routes, certificateRotues...)
+	routes := healthCheckRoutes
+	routes = append(routes, userRoutes...)
+	routes = append(routes, skillRoutes...)
+	routes = append(routes, profileRoutes...)
+	routes = append(routes, educationRoutes...)
+	routes = append(routes, certificateRoutes...)
 
 	return routes
 }
 
 // SetupRoutesWithMiddleware setup middleware for routes or otherwise
-func SetupRoutesWithMiddleware(g *gin.Engine) {
+func SetupRoutesWithMiddleware(g *gin.RouterGroup) {
 	for _, route := range Load() {
-		g.Use(middlewares.LoggerMiddleware)
-		g.Use(middlewares.JSONMiddlware)
+		g.Use(middlewares.LoggerMiddleware())
+		g.Use(middlewares.JSONMiddlware())
 
 		if route.AuthRequired {
 			authorized := g.Group("/")
 			// define authen here
-			authorized.Use(middlewares.AuthMiddlware) {
-				authorized.Handle(route.method, route.URI, route.Handler)
+			authorized.Use(middlewares.AuthMiddlware())
+			{
+				authorized.Handle(route.Method, route.URI, route.Handler)
 			}
-		} 
-		else {
-			g.Handle(route.method, route.URI, route.Handler)
+		} else {
+			g.Handle(route.Method, route.URI, route.Handler)
 		}
 	}
 }

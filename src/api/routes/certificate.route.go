@@ -5,11 +5,12 @@ import (
 	"net/http"
 )
 
-func GetCertificateRoutes() []Route {
+// CertificateRoutes define certificate routes
+func CertificateRoutes() []Route {
 	routes := []Route{
 		Route{
 			URI:          "/certificates",
-			Method:       http.Get,
+			Method:       http.MethodGet,
 			Handler:      controllers.GetCertificates,
 			AuthRequired: false,
 		},

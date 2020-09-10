@@ -28,7 +28,7 @@ func GetProfile(c *gin.Context) {
 
 	results, err := service.GetProfile()
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}
 
 	responses.OK(c, results)

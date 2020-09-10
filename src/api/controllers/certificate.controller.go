@@ -14,7 +14,7 @@ import (
 func GetCertificates(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
-		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
 	defer dbContext.Close()
@@ -24,7 +24,7 @@ func GetCertificates(c *gin.Context) {
 
 	results, err := service.GetCertificates()
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}
 
 	responses.OK(c, results)

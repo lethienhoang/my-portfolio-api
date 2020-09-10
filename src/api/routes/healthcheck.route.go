@@ -5,13 +5,13 @@ import (
 	"net/http"
 )
 
-// ProfileRoutes define profile routes
-func ProfileRoutes() []Route {
+// HealthCheckRoutes define healthcheck route
+func HealthCheckRoutes() []Route {
 	routes := []Route{
 		Route{
-			URI:          "/profile",
+			URI:          "/HealthCheck",
 			Method:       http.MethodGet,
-			Handler:      controllers.GetProfile,
+			Handler:      controllers.HealthCheck,
 			AuthRequired: false,
 		},
 	}

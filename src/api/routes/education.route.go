@@ -5,11 +5,12 @@ import (
 	"net/http"
 )
 
-func GetEducationRoutes() []Route {
+// EducationRoutes define education routes
+func EducationRoutes() []Route {
 	routes := []Route{
 		Route{
 			URI:          "/educations",
-			Method:       http.Get,
+			Method:       http.MethodGet,
 			Handler:      controllers.GetEducations,
 			AuthRequired: false,
 		},

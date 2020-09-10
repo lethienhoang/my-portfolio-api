@@ -5,23 +5,24 @@ import (
 	"net/http"
 )
 
-func GetSkillRoutes() []Route {
+// SkillRoutes define skill routes
+func SkillRoutes() []Route {
 	routes := []Route{
 		Route{
 			URI:          "/skills?type={type}",
-			Method:       http.Get,
+			Method:       http.MethodGet,
 			Handler:      controllers.GetSkillByType,
 			AuthRequired: false,
 		},
 		Route{
 			URI:          "/skills?manufacturer={type}",
-			Method:       http.Get,
+			Method:       http.MethodGet,
 			Handler:      controllers.GetSkillsByManufacturer,
 			AuthRequired: false,
 		},
 		Route{
 			URI:          "/skills",
-			Method:       http.Get,
+			Method:       http.MethodGet,
 			Handler:      controllers.GetSkills,
 			AuthRequired: false,
 		},

@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"my-portfolio-api/utils/auth"
+	"my-portfolio-api/utils/types"
 
 	"github.com/gin-gonic/gin"
 )
@@ -36,7 +37,7 @@ func AuthMiddlware() gin.HandlerFunc {
 
 		ctx := context.WithValue(
 			c.Request.Context(),
-			auth.UserKey("user"),
+			types.UserKey("user"),
 			claim)
 
 		c.Request = c.Request.WithContext(ctx)

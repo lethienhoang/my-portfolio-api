@@ -15,7 +15,7 @@ import (
 func GetSkills(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
-		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
 	defer dbContext.Close()
@@ -25,7 +25,7 @@ func GetSkills(c *gin.Context) {
 
 	skills, err := service.GetSkills()
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}
 
 	responses.OK(c, skills)
@@ -40,7 +40,7 @@ func GetSkillByType(c *gin.Context) {
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
-		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
 	defer dbContext.Close()
@@ -50,7 +50,7 @@ func GetSkillByType(c *gin.Context) {
 
 	results, err := service.GetSkillByType(param)
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}
 
 	responses.OK(c, results)
@@ -65,7 +65,7 @@ func GetSkillsByManufacturer(c *gin.Context) {
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
-		responses.ERROR(c, http.StatusInternalServerError, err.Error()
+		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
 	defer dbContext.Close()
@@ -75,7 +75,7 @@ func GetSkillsByManufacturer(c *gin.Context) {
 
 	results, err := service.GetSkillsByManufacturer(param)
 	if err != nil {
-		responses.ERROR(c, http.StatusUnprocessableEntity, err.Error()
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}
 
 	responses.OK(c, results)
