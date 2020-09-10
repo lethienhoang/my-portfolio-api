@@ -2,13 +2,11 @@ package services
 
 import (
 	"errors"
+	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
-	"my-portfolio-api/viewmodels"
-
-	"github.com/jinzhu/copier"
 )
 
-// CertificateService respresents certificate repo, service
+// CertificateService contain CertificateRepository
 type CertificateService struct {
 	certificateRepo *repositories.CertificateRepository
 }
@@ -21,9 +19,7 @@ func NewCertificateService(newRepo *repositories.CertificateRepository) *Certifi
 }
 
 // GetCertificates is getting all certificate in db
-func (sv *CertificateService) GetCertificates() ([]viewmodels.CertificateVM, error) {
-	var cerVM []viewmodels.CertificateVM
-
+func (sv *CertificateService) GetCertificates() ([]models.CertificateEntity, error) {
 	entity, err := sv.certificateRepo.GetAll()
 	if err != nil {
 		return nil, err
@@ -33,7 +29,5 @@ func (sv *CertificateService) GetCertificates() ([]viewmodels.CertificateVM, err
 		return nil, errors.New("certificate is not found")
 	}
 
-	copier.Copy(&cerVM, &entity)
-
-	return cerVM, nil
+	return entity, nil
 }

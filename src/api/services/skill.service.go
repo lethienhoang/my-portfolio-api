@@ -2,10 +2,8 @@ package services
 
 import (
 	"errors"
+	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
-	"my-portfolio-api/viewmodels"
-
-	"github.com/jinzhu/copier"
 )
 
 // SkillService respresents skill repo, service
@@ -25,11 +23,9 @@ func NewSkillService(newRepo *repositories.SkillRepository) *SkillService {
 // * - cloud
 // * - back end
 // * - font end
-func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, error) {
-	skillVM := []viewmodels.SkillVM{}
-
+func (sv *SkillService) GetSkillByType(skillType string) ([]models.SkillEntity, error) {
 	if skillType == "" {
-		return skillVM, errors.New("skill type is requried")
+		return nil, errors.New("skill type is requried")
 	}
 
 	entity, err := sv.skillRepo.GetByType(skillType)
@@ -41,17 +37,13 @@ func (sv *SkillService) GetSkillByType(skillType string) ([]viewmodels.SkillVM, 
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVM, &entity)
-
-	return skillVM, nil
+	return entity, nil
 }
 
 // GetSkillsByManufacturer is getting data base on manufacturer
 // * - microsoft
 // * - Google
-func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]viewmodels.SkillVM, error) {
-	var skillVM []viewmodels.SkillVM
-
+func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]models.SkillEntity, error) {
 	entity, err := sv.skillRepo.GetByManufacturer(manufacturerType)
 	if err != nil {
 		return nil, err
@@ -61,24 +53,19 @@ func (sv *SkillService) GetSkillsByManufacturer(manufacturerType string) ([]view
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVM, &entity)
-
-	return skillVM, nil
+	return entity, nil
 }
 
 // GetSkills is getting all certificate in db
-func (sv *SkillService) GetSkills() ([]viewmodels.SkillVM, error) {
+func (sv *SkillService) GetSkills() ([]models.SkillEntity, error) {
 	entity, err := sv.skillRepo.GetAll()
 	if err != nil {
 		return nil, err
 	}
 
-	skillVM := []viewmodels.SkillVM{}
 	if len(entity) == 0 {
 		return nil, errors.New("skill is not found")
 	}
 
-	copier.Copy(&skillVM, &entity)
-
-	return skillVM, nil
+	return entity, nil
 }

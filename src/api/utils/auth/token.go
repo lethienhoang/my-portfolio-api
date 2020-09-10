@@ -1,11 +1,12 @@
 package auth
 
 import (
+	"errors"
 	"fmt"
 	"my-portfolio-api/config"
 	"my-portfolio-api/models"
-	"my-portfolio-api/utils/auth"
 	"my-portfolio-api/utils/redisserver"
+	"my-portfolio-api/utils/types"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -53,20 +54,24 @@ func ExtractToken(r *gin.Context) (*jwt.Token, error) {
 }
 
 // TokenValid check token validation
-func TokenValid(r *gin.Context) (models.Claim, error) {
+func TokenValid(r *gin.Context) (*models.Claim, error) {
 	token, err := ExtractToken(r)
 	if err != nil {
 		return nil, err
 	}
 
-	claim, ok := token.Claims.(models.Claim)
+	claim, ok := token.Claims.(*models.Claim)
 	if !ok && !token.Valid {
 		return nil, err
 	}
 
-	_, err := redisserver.REDISCLIENT.Get(claim.AccessTokenUUID).Result()
+	userID, err := redisserver.REDISCLIENT.Get(claim.AccessTokenUUID.String()).Result()
 	if err != nil {
 		return nil, err
+	}
+
+	if userID != claim.UserID.String() {
+		return nil, errors.New("Unauthorized")
 	}
 
 	return claim, nil
@@ -74,6 +79,6 @@ func TokenValid(r *gin.Context) (models.Claim, error) {
 
 // ClaimFromContext reviced claim from context
 func ClaimFromContext(r *gin.Context) models.Claim {
-	value, _ := r.Request.Context().Value(auth.UserKey("user")).(models.Claim)
+	value, _ := r.Request.Context().Value(types.UserKey("user")).(models.Claim)
 	return value
 }

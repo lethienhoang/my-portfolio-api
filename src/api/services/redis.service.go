@@ -21,8 +21,9 @@ func StoreTokenToRedis(userid uuid.UUID, token *models.Token) error {
 	return nil
 }
 
-func DeleteTokenFromRedis(userid uuid.UUID) error {
-	_, err := redisserver.REDISCLIENT.Del(userid.String()).Result()
+// DeleteTokenFromRedis remove access token when user logout
+func DeleteTokenFromRedis(accessTokenUUID uuid.UUID) error {
+	_, err := redisserver.REDISCLIENT.Del(accessTokenUUID.String()).Result()
 	if err != nil {
 		return err
 	}

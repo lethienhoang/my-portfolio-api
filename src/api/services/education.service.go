@@ -2,10 +2,8 @@ package services
 
 import (
 	"errors"
+	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
-	"my-portfolio-api/viewmodels"
-
-	"github.com/jinzhu/copier"
 )
 
 // EducationService respresents certificate repo, service
@@ -21,19 +19,15 @@ func NewEducationService(newRepo *repositories.EducationRepository) *EducationSe
 }
 
 // GetEducations is getting all certificate in db
-func (sv *EducationService) GetEducations() ([]viewmodels.EducationVM, error) {
-	var eduVM []viewmodels.EducationVM
-
+func (sv *EducationService) GetEducations() ([]models.EducationEntity, error) {
 	entity, err := sv.educationRepo.GetAll()
 	if err != nil {
 		return nil, err
 	}
 
 	if len(entity) == 0 {
-		return eduVM, errors.New("education is not found")
+		return nil, errors.New("education is not found")
 	}
 
-	copier.Copy(&eduVM, &entity)
-
-	return eduVM, nil
+	return entity, nil
 }

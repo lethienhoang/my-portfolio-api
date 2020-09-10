@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"context"
-	"my-portfolio-api/utils/auth"
 	"my-portfolio-api/services"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/database"
@@ -31,11 +30,14 @@ func SignIn(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err.Error())
 	}
 
-	responses.OK(c, token) 
+	tokens := map[string]string{
+		"access_token": token
+	}
+
+	responses.OK(c, tokens) 
 }
 
 func SignOut(c *gin.Context) {
-	claim := auth.ClaimFromContext(c)
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err.Error()
@@ -46,10 +48,11 @@ func SignOut(c *gin.Context) {
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
 
-	token, err := service.SignOut(claim.UserID)
+	token, err := service.SignOut(c)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err.Error())
 	}
 
+	
 	responses.OK(c, token) 
 }

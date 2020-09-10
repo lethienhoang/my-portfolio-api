@@ -6,17 +6,20 @@ import (
 	"my-portfolio-api/utils/auth"
 	"my-portfolio-api/utils/security"
 
-	uuid "github.com/satori/go.uuid"
+	"github.com/gin-gonic/gin"
 )
 
+// UserService contain UserRepository
 type UserService struct {
 	repo *repositories.UserRepository
 }
 
+// NewUserService is initialize
 func NewUserService(repo *repositories.UserRepository) *UserService {
 	return &UserService{repo}
 }
 
+// SignIn is login
 func (sv *UserService) SignIn(email, password string) (string, error) {
 	if email == "" {
 		return "", errors.New("Email is required")
@@ -47,14 +50,12 @@ func (sv *UserService) SignIn(email, password string) (string, error) {
 	return token.AccessToken, nil
 }
 
-func (sv *UserService) SignOut(userid uuid.UUID) error {
+// SignOut is logout system
+func (sv *UserService) SignOut(c *gin.Context) error {
 	var err error
+	claim := auth.ClaimFromContext(c)
 
-	if userid == "" {
-		return errors.New("Email is required")
-	}
-
-	if err = DeleteTokenFromRedis(userid.String()); err != nil {
+	if err = DeleteTokenFromRedis(claim.AccessTokenUUID); err != nil {
 		return err
 	}
 
