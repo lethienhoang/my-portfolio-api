@@ -10,7 +10,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAll from the DB
+// GetEducations godoc
+// @Description get educations
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} []models.EducationEntity
+// @Failure 422 {object} map[string]string
+// @Router /educations [get]
 func GetEducations(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {

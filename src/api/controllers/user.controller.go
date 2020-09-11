@@ -10,7 +10,15 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// SignIn login to system
+// SignIn godoc
+// @Description login to system
+// @Accept  json
+// @Produce  json
+// @Param email body string true "Email"
+// @Param password body string true "Password"
+// @Success 200 {object} map[string]string
+// @Failure 422 {object} map[string]string
+// @Router /users/signin [post]
 func SignIn(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
@@ -37,7 +45,14 @@ func SignIn(c *gin.Context) {
 	responses.OK(c, tokens)
 }
 
-// SignOut logout system
+// SignIn godoc
+// @Description login to system
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Success 200 {object} map[string]string
+// @Failure 422 {object} map[string]string
+// @Router /users/signout [get]
 func SignOut(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
@@ -54,5 +69,9 @@ func SignOut(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
-	responses.OK(c, "Logout is successfully")
+	res := map[string]string{
+		"message": "Logout is successfully",
+	}
+
+	responses.OK(c, res)
 }

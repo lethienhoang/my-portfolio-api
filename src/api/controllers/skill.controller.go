@@ -11,7 +11,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetSkills from the DB
+// GetSkills godoc
+// @Description get all skills
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills [get]
 func GetSkills(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
@@ -31,7 +37,14 @@ func GetSkills(c *gin.Context) {
 	responses.OK(c, skills)
 }
 
-// GetSkillByType from the DB
+// GetSkillByType godoc
+// @Description get all skills by type
+// @Accept  json
+// @Produce  json
+// @Param type path string true "Type"
+// @Success 200 {array} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills/{type} [get]
 func GetSkillByType(c *gin.Context) {
 	param, ok := c.GetQuery("type")
 	if ok == false {
@@ -56,7 +69,14 @@ func GetSkillByType(c *gin.Context) {
 	responses.OK(c, results)
 }
 
-// GetSkillsByManufacturer from the DB
+// GetSkillsByManufacturer godoc
+// @Description get all skills by manufacturer
+// @Accept  json
+// @Produce  json
+// @Param manufacturer path string true "Manufacturer"
+// @Success 200 {array} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills/{manufacturer} [get]
 func GetSkillsByManufacturer(c *gin.Context) {
 	param, ok := c.GetQuery("manufacturer")
 	if ok == false {

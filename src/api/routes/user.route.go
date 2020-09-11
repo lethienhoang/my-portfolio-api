@@ -9,13 +9,13 @@ import (
 func UserRoutes() []Route {
 	routes := []Route{
 		Route{
-			URI:          "/SignIn",
+			URI:          "users/signin",
 			Method:       http.MethodPost,
 			Handler:      controllers.SignIn,
 			AuthRequired: false,
 		},
 		Route{
-			URI:          "/SignOut",
+			URI:          "users/signout",
 			Method:       http.MethodGet,
 			Handler:      controllers.SignOut,
 			AuthRequired: true,

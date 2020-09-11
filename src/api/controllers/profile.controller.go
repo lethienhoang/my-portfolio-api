@@ -14,7 +14,13 @@ type ProfileController struct {
 	profileService *services.ProfileService
 }
 
-// GetProfile from the DB
+// GetProfile godoc
+// @Description get my profile
+// @Accept  json
+// @Produce  json
+// @Success 200 {object} models.ProfileEntity
+// @Failure 422 {object} map[string]string
+// @Router /profile [get]
 func GetProfile(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {

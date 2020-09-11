@@ -9,8 +9,8 @@ import (
 
 type BaseEntity struct {
 	ID        uuid.UUID `gorm:"type:uuid;primary_key;"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP"`
+	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
+	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
 }
 
 func (base *BaseEntity) BeforeCreate(scope *gorm.Scope) error {

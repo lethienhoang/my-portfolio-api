@@ -37,6 +37,8 @@ services:
     #         - $GOPATH/pkg/mod/cache:/go/pkg/mod/cache
     #     env_file: 
     #         - .env
+    #     environment: 
+    #         - export GIN_MODE=release
     #     networks: 
     #         - servicesnet
     #     command: CompileDaemon --build="go build -o main ./" --command=./out

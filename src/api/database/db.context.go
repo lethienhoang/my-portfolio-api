@@ -13,7 +13,7 @@ type DbContext struct {
 	db *gorm.DB
 }
 
-// GetDbContext connect database
+// ConnectDb connect database
 func ConnectDb() (*DbContext, error) {
 	db, err := gorm.Open(config.DBDRIVER, config.DBURL)
 	if err != nil {
@@ -46,5 +46,10 @@ func (d *DbContext) Close() error {
 
 // Automigrate migariton model schema
 func Automigrate(db *gorm.DB) error {
-	return db.AutoMigrate(&models.SkillEntity{}, &models.ProfileEntity{}, &models.EducationEntity{}, &models.CertificateEntity{}).Error
+	return db.AutoMigrate(&models.SkillEntity{},
+		&models.ProfileEntity{},
+		&models.EducationEntity{},
+		&models.CertificateEntity{},
+		&models.UserEntity{},
+		&models.SkillEntity{}).Error
 }

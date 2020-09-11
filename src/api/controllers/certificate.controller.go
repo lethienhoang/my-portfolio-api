@@ -10,7 +10,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GetAll from the DB
+// GetCertificates godoc
+// @Summary Show a account
+// @Description get certificates
+// @Accept  json
+// @Produce  json
+// @Success 200 {array} []models.CertificateEntity
+// @Failure 422 {object} map[string]string
+// @Router /certificates [get]
 func GetCertificates(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {

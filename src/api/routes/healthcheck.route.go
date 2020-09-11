@@ -9,7 +9,7 @@ import (
 func HealthCheckRoutes() []Route {
 	routes := []Route{
 		Route{
-			URI:          "/HealthCheck",
+			URI:          "/healthcheck",
 			Method:       http.MethodGet,
 			Handler:      controllers.HealthCheck,
 			AuthRequired: false,

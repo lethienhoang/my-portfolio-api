@@ -11,6 +11,7 @@ import (
 
 var (
 	PORT      = 0
+	API_HOST  = ""
 	SECRETKEY []byte
 	DBURL     = ""
 	DBDRIVER  = ""
@@ -27,16 +28,17 @@ func Load() {
 		log.Fatal(err)
 	}
 
-	host := os.Getenv("")
-	user := os.Getenv("")
-	dbname := os.Getenv("")
-	password := os.Getenv("")
+	host := os.Getenv("DB_HOST")
+	user := os.Getenv("DB_USER")
+	dbname := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
 
-	DBDRIVER = os.Getenv("")
+	DBDRIVER = os.Getenv("DB_DRIVER")
 	DBURL = fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", host, user, dbname, password)
 
 	ISSUER = os.Getenv("ISSUER")
 	SECRETKEY = []byte(os.Getenv("API_SECRET"))
+	API_HOST = os.Getenv("API_HOST")
 	PORT, err = strconv.Atoi(os.Getenv("API_PORT"))
 	if err != nil {
 		PORT = 9000
