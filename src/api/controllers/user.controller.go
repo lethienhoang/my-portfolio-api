@@ -7,6 +7,8 @@ import (
 	"my-portfolio-api/utils/responses"
 	"net/http"
 
+	uuid "github.com/satori/go.uuid"
+
 	"github.com/gin-gonic/gin"
 )
 
@@ -45,7 +47,42 @@ func SignIn(c *gin.Context) {
 	responses.OK(c, tokens)
 }
 
-// SignIn godoc
+// SignUp godoc
+// @Description login to system
+// @Accept  json
+// @Produce  json
+// @Param email body string true "Email"
+// @Param password body string true "Password"
+// @Success 200 {object} map[string]string
+// @Failure 422 {object} map[string]string
+// @Router /users/signup [post]
+func SignUp(c *gin.Context) {
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	email, _ := c.GetPostForm("email")
+	password, _ := c.GetPostForm("password")
+
+	repo := repositories.NewUserRepository(dbContext.GetDbContext())
+	service := services.NewUserService(repo)
+
+	err = service.SignUp(email, password)
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	res := map[string]string{
+		"message": "Account is created successfully",
+	}
+
+	responses.OK(c, res)
+}
+
+// SignOut godoc
 // @Description login to system
 // @Accept  json
 // @Produce  json
@@ -65,6 +102,42 @@ func SignOut(c *gin.Context) {
 	service := services.NewUserService(repo)
 
 	err = service.SignOut(c)
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	res := map[string]string{
+		"message": "Logout is successfully",
+	}
+
+	responses.OK(c, res)
+}
+
+// UpdatePassword godoc
+// @Description login to system
+// @Accept  json
+// @Produce  json
+// @Security ApiKeyAuth
+// @Param id path string true "UserId"
+// @Param password body string true "Password"
+// @Success 200 {object} map[string]string
+// @Failure 422 {object} map[string]string
+// @Router /users/update-password [put]
+func UpdatePassword(c *gin.Context) {
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	repo := repositories.NewUserRepository(dbContext.GetDbContext())
+	service := services.NewUserService(repo)
+
+	id, _ := uuid.FromString(c.Param("id"))
+	pass := c.PostForm("password")
+
+	err = service.UpdateUserPassword(id, pass)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}

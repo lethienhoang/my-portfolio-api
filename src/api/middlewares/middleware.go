@@ -29,7 +29,7 @@ func LoggerMiddleware() gin.HandlerFunc {
 	logFileName := time.Now().UTC().Format("yyyy-MM-dd") + "-log.log"
 	fileName := path.Join("/logs/", logFileName)
 	// src, err := os.OpenFile(fileName, os.O_CREATE|os.O_SYNC|os.O_APPEND|os.O_RDONLY, os.ModeAppend)
-	src, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND|os.O_RDONLY, os.ModeAppend)
+	src, err := os.OpenFile(fileName, os.O_CREATE|os.O_APPEND, os.ModeAppend)
 
 	if err != nil {
 		fmt.Println("err", err)
@@ -69,6 +69,23 @@ func LoggerMiddleware() gin.HandlerFunc {
 func JSONMiddlware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Header("Content-Type", "application/json")
+		c.Next()
+	}
+}
+
+// CORSMiddleware enables data transfer from different domains
+func CORSMiddleware() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
+		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, PATCH, DELETE")
+
+		if c.Request.Method == "OPTIONS" {
+			c.AbortWithStatus(204)
+			return
+		}
+
 		c.Next()
 	}
 }

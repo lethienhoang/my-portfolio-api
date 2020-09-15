@@ -4,6 +4,7 @@ import (
 	"errors"
 	"my-portfolio-api/utils/security"
 	"strings"
+	"unicode"
 
 	"github.com/badoux/checkmail"
 )
@@ -26,11 +27,51 @@ func (u *UserEntity) BeforeSave() error {
 	return nil
 }
 
-// Validate validates the inputs
+// PasswordValidate validates plain password against the rules defined below.
+//
+// upp: at least one upper case letter.
+// low: at least one lower case letter.
+// num: at least one digit.
+// sym: at least one special character.
+// tot: at least eight characters long.
+// No empty string or whitespace.
+func PasswordValidate(pass string) bool {
+	var (
+		upp, low, num, symb bool
+		length              uint8
+	)
+
+	for _, char := range pass {
+		switch {
+		case unicode.IsUpper(char):
+			upp = true
+			length++
+		case unicode.IsLower(char):
+			low = true
+			length++
+		case unicode.IsNumber(char):
+			num = true
+			length++
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			symb = true
+			length++
+		default:
+			return false
+		}
+	}
+
+	if !upp || !low || !num || !symb || length < 8 {
+		return false
+	}
+
+	return true
+}
+
+// Validate validates the inputs of user created
 func (u *UserEntity) Validate(action string) error {
 	{
 		switch strings.ToLower(action) {
-		case "login":
+		case "insert":
 			if u.Email == "" {
 				return errors.New("Email is required")
 			}
@@ -41,6 +82,31 @@ func (u *UserEntity) Validate(action string) error {
 
 			if u.Password == "" {
 				return errors.New("Password is required")
+			}
+
+			if ok := PasswordValidate(u.Password); ok == false {
+				s := "-At least one upper case letter \n" +
+					"-At least one lower case letter \n" +
+					"-At least one digit \n" +
+					"-At least one special character \n" +
+					"-At least eight characters long"
+
+				return errors.New(s)
+			}
+
+		case "udpate":
+			if u.Password == "" {
+				return errors.New("Password is required")
+			}
+
+			if ok := PasswordValidate(u.Password); ok == false {
+				s := "-At least one upper case letter \n" +
+					"-At least one lower case letter \n" +
+					"-At least one digit \n" +
+					"-At least one special character \n" +
+					"-At least eight characters long"
+
+				return errors.New(s)
 			}
 		default:
 			return nil

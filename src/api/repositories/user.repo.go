@@ -5,6 +5,7 @@ import (
 	"my-portfolio-api/utils/channels"
 
 	"github.com/jinzhu/gorm"
+	uuid "github.com/satori/go.uuid"
 )
 
 type UserRepository struct {
@@ -25,7 +26,7 @@ func (repo *UserRepository) GetByEmail(email string) (models.UserEntity, error) 
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Where("email=?", email).Take(&model).Error
+		err = repo.db.Model(&models.UserEntity{}).Where("email=?", email).Take(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -39,4 +40,74 @@ func (repo *UserRepository) GetByEmail(email string) (models.UserEntity, error) 
 	}
 
 	return model, err
+}
+
+func (repo *UserRepository) Insert(model *models.UserEntity) error {
+	var err error
+	done := make(chan bool)
+
+	go func(ch chan<- bool) {
+		defer close(ch)
+
+		err = repo.db.Model(&models.UserEntity{}).Select("Email", "Password").Create(&model).Error
+		if err != nil {
+			ch <- false
+			return
+		}
+
+		ch <- true
+	}(done)
+
+	if channels.OK(done) {
+		return nil
+	}
+
+	return err
+}
+
+func (repo *UserRepository) ExistEmail(email string) error {
+	var model models.UserEntity
+	var err error
+	done := make(chan bool)
+
+	go func(ch chan<- bool) {
+		defer close(ch)
+
+		err = repo.db.Model(&models.UserEntity{}).Where("email=?", email).Take(&model).Error
+		if err != nil {
+			ch <- false
+			return
+		}
+
+		ch <- true
+	}(done)
+
+	if channels.OK(done) {
+		return nil
+	}
+
+	return err
+}
+
+func (repo *UserRepository) UpdatePassword(id uuid.UUID, password string) error {
+	var err error
+	done := make(chan bool)
+
+	go func(ch chan<- bool) {
+		defer close(ch)
+
+		err = repo.db.Model(&models.UserEntity{}).Where("Id=?", id).Update("Password", password).Error
+		if err != nil {
+			ch <- false
+			return
+		}
+
+		ch <- true
+	}(done)
+
+	if channels.OK(done) {
+		return nil
+	}
+
+	return err
 }

@@ -20,6 +20,18 @@ func UserRoutes() []Route {
 			Handler:      controllers.SignOut,
 			AuthRequired: true,
 		},
+		Route{
+			URI:          "users/update-password",
+			Method:       http.MethodPut,
+			Handler:      controllers.UpdatePassword,
+			AuthRequired: true,
+		},
+		Route{
+			URI:          "users/signup",
+			Method:       http.MethodPost,
+			Handler:      controllers.SignUp,
+			AuthRequired: false,
+		},
 	}
 
 	return routes
