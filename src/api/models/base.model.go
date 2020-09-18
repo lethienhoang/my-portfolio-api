@@ -13,16 +13,16 @@ type BaseEntity struct {
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
 }
 
-func (base *BaseEntity) BeforeCreate(scope *gorm.Scope) error {
+func (base *BaseEntity) BeforeCreate(tx *gorm.DB) {
 	uuid := uuid.NewV4()
-	return scope.SetColumn("ID", uuid)
+	base.ID = uuid
 }
 
-func (base *BaseEntity) BeforeSave() {
+func (base *BaseEntity) BeforeSave(tx *gorm.DB) {
 	base.CreatedAt = time.Now()
 	base.UpdatedAt = time.Now()
 }
 
-func (base *BaseEntity) BeforeUpdate() {
+func (base *BaseEntity) BeforeUpdate(tx *gorm.DB) {
 	base.UpdatedAt = time.Now()
 }

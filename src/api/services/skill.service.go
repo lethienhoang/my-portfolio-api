@@ -4,6 +4,8 @@ import (
 	"errors"
 	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 // SkillService respresents skill repo, service
@@ -65,6 +67,36 @@ func (sv *SkillService) GetSkills() ([]models.SkillEntity, error) {
 
 	if len(entity) == 0 {
 		return nil, errors.New("skill is not found")
+	}
+
+	return entity, nil
+}
+
+// BulkInsert insert list of data into db
+func (sv *SkillService) BulkInsert(skills []models.SkillEntity) ([]models.SkillEntity, error) {
+	entity, err := sv.skillRepo.BatchInsert(skills)
+	if err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+// Insert insert data into db
+func (sv *SkillService) Insert(skill *models.SkillEntity) (*models.SkillEntity, error) {
+	entity, err := sv.skillRepo.Insert(skill)
+	if err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+// Update is getting all certificate in db
+func (sv *SkillService) Update(id uuid.UUID, skill *models.SkillEntity) (*models.SkillEntity, error) {
+	entity, err := sv.skillRepo.Update(id, skill)
+	if err != nil {
+		return nil, err
 	}
 
 	return entity, nil

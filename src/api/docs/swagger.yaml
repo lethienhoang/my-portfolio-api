@@ -78,6 +78,7 @@ definitions:
       updatedAt:
         type: string
     type: object
+host: localhost:8888
 info:
   contact:
     email: support@swagger.io
@@ -118,16 +119,18 @@ paths:
     get:
       consumes:
       - application/json
-      description: check api healthcheck
+      description: get educations
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            additionalProperties:
-              type: string
-            type: object
+            items:
+              items:
+                $ref: '#/definitions/models.EducationEntity'
+              type: array
+            type: array
         "422":
           description: Unprocessable Entity
           schema:
@@ -157,6 +160,61 @@ paths:
       consumes:
       - application/json
       description: get all skills
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SkillEntity'
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+    post:
+      consumes:
+      - application/json
+      description: insertl skill to database
+      parameters:
+      - description: Skill
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.SkillEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.SkillEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+    put:
+      consumes:
+      - application/json
+      description: get all skills by manufacturer
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Skill
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.SkillEntity'
       produces:
       - application/json
       responses:
@@ -224,6 +282,35 @@ paths:
             additionalProperties:
               type: string
             type: object
+  /skills/bulk:
+    post:
+      consumes:
+      - application/json
+      description: insert skills to database
+      parameters:
+      - description: Skill
+        in: body
+        name: req
+        required: true
+        schema:
+          items:
+            $ref: '#/definitions/models.SkillEntity'
+          type: array
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.SkillEntity'
+            type: array
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
   /users/signin:
     post:
       consumes:
@@ -262,6 +349,73 @@ paths:
       consumes:
       - application/json
       description: login to system
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      security:
+      - ApiKeyAuth: []
+  /users/signup:
+    post:
+      consumes:
+      - application/json
+      description: login to system
+      parameters:
+      - description: Email
+        in: body
+        name: email
+        required: true
+        schema:
+          type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+  /users/update-password:
+    put:
+      consumes:
+      - application/json
+      description: login to system
+      parameters:
+      - description: UserId
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Password
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
       produces:
       - application/json
       responses:

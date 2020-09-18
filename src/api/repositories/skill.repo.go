@@ -13,7 +13,7 @@ type SkillRepository struct {
 	db *gorm.DB
 }
 
-// NewProfileRepository is initialize, passing database connection and return a new repo with connection
+// NewSkillRepository is initialize, passing database connection and return a new repo with connection
 func NewSkillRepository(db *gorm.DB) *SkillRepository {
 	return &SkillRepository{db}
 }
@@ -26,7 +26,7 @@ func (repo *SkillRepository) Update(id uuid.UUID, model *models.SkillEntity) (*m
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&model).Where("Id=?", id).Update(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Omit("ID").Where("ID=?", id).Update(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -50,7 +50,7 @@ func (repo *SkillRepository) Insert(model *models.SkillEntity) (*models.SkillEnt
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Create(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Create(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -66,6 +66,30 @@ func (repo *SkillRepository) Insert(model *models.SkillEntity) (*models.SkillEnt
 	return nil, err
 }
 
+// BatchInsert intert batch data and return array
+func (repo *SkillRepository) BatchInsert(skills []models.SkillEntity) ([]models.SkillEntity, error) {
+	var err error
+	done := make(chan bool)
+
+	go func(ch chan<- bool) {
+		defer close(ch)
+
+		err = repo.db.Model(&models.SkillEntity{}).Create(&skills).Error
+		if err != nil {
+			ch <- false
+			return
+		}
+
+		ch <- true
+	}(done)
+
+	if channels.OK(done) {
+		return skills, nil
+	}
+
+	return nil, err
+}
+
 // GetByType returns Skill records base on type
 func (repo *SkillRepository) GetByType(skillType string) ([]models.SkillEntity, error) {
 	var err error
@@ -75,7 +99,7 @@ func (repo *SkillRepository) GetByType(skillType string) ([]models.SkillEntity, 
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Where("Type=?", skillType).Find(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("Type=?", skillType).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -100,7 +124,7 @@ func (repo *SkillRepository) GetByManufacturer(manufacturerType string) ([]model
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Where("Manufacturer=?", manufacturerType).Find(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("Manufacturer=?", manufacturerType).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -125,7 +149,7 @@ func (repo *SkillRepository) GetAll() ([]models.SkillEntity, error) {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Find(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -150,7 +174,7 @@ func (repo *SkillRepository) GetByID(id uuid.UUID) (models.SkillEntity, error) {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Take(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("ID=?", id).Take(&model).Error
 		if err != nil {
 			ch <- false
 			return

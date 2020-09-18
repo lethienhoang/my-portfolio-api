@@ -3,12 +3,14 @@ package controllers
 import (
 	"errors"
 	"my-portfolio-api/database"
+	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
 	"my-portfolio-api/services"
 	"my-portfolio-api/utils/responses"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	uuid "github.com/satori/go.uuid"
 )
 
 // GetSkills godoc
@@ -94,6 +96,108 @@ func GetSkillsByManufacturer(c *gin.Context) {
 	service := services.NewSkillService(repo)
 
 	results, err := service.GetSkillsByManufacturer(param)
+	if err != nil {
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+	}
+
+	responses.OK(c, results)
+}
+
+// Update godoc
+// @Description get all skills by manufacturer
+// @Accept  json
+// @Produce  json
+// @Param id path string true "ID"
+// @Param req body models.SkillEntity true "Skill"
+// @Success 200 {array} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills [put]
+func Update(c *gin.Context) {
+	id, err := uuid.FromString(c.Query("id"))
+	if err != nil {
+		responses.ERROR(c, http.StatusBadRequest, err)
+	}
+
+	var req models.SkillEntity
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responses.ERROR(c, http.StatusBadRequest, err)
+	}
+
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
+	service := services.NewSkillService(repo)
+
+	results, err := service.Update(id, &req)
+	if err != nil {
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+	}
+
+	responses.OK(c, results)
+}
+
+// Insert godoc
+// @Description insertl skill to database
+// @Accept  json
+// @Produce  json
+// @Param req body models.SkillEntity true "Skill"
+// @Success 200 {object} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills [post]
+func Insert(c *gin.Context) {
+	var req models.SkillEntity
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responses.ERROR(c, http.StatusBadRequest, err)
+	}
+
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
+	service := services.NewSkillService(repo)
+
+	results, err := service.Insert(&req)
+	if err != nil {
+		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+	}
+
+	responses.OK(c, results)
+}
+
+// BulkInsert godoc
+// @Description insert skills to database
+// @Accept  json
+// @Produce  json
+// @Param req body []models.SkillEntity true "Skill"
+// @Success 200 {array} models.SkillEntity
+// @Failure 422 {object} map[string]string
+// @Router /skills/bulk [post]
+func BulkInsert(c *gin.Context) {
+	var req []models.SkillEntity
+	if err := c.ShouldBindJSON(&req); err != nil {
+		responses.ERROR(c, http.StatusBadRequest, err)
+	}
+
+	dbContext, err := database.ConnectDb()
+	if err != nil {
+		responses.ERROR(c, http.StatusInternalServerError, err)
+	}
+
+	defer dbContext.Close()
+
+	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
+	service := services.NewSkillService(repo)
+
+	results, err := service.BulkInsert(req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 	}

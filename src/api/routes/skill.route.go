@@ -26,6 +26,24 @@ func SkillRoutes() []Route {
 			Handler:      controllers.GetSkills,
 			AuthRequired: false,
 		},
+		Route{
+			URI:          "/skills",
+			Method:       http.MethodPut,
+			Handler:      controllers.Update,
+			AuthRequired: true,
+		},
+		Route{
+			URI:          "/skills",
+			Method:       http.MethodPost,
+			Handler:      controllers.Insert,
+			AuthRequired: true,
+		},
+		Route{
+			URI:          "/skills/bulk",
+			Method:       http.MethodPost,
+			Handler:      controllers.BulkInsert,
+			AuthRequired: true,
+		},
 	}
 
 	return routes
