@@ -111,7 +111,7 @@ func GetSkillsByManufacturer(c *gin.Context) {
 // @Param req body models.SkillEntity true "Skill"
 // @Success 200 {array} models.SkillEntity
 // @Failure 422 {object} map[string]string
-// @Router /skills [put]
+// @Router /skills/{:id} [put]
 func Update(c *gin.Context) {
 	id, err := uuid.FromString(c.Query("id"))
 	if err != nil {
@@ -180,7 +180,7 @@ func Insert(c *gin.Context) {
 // @Param req body []models.SkillEntity true "Skill"
 // @Success 200 {array} models.SkillEntity
 // @Failure 422 {object} map[string]string
-// @Router /skills/bulk [post]
+// @Router /skills/bulk [put]
 func BulkInsert(c *gin.Context) {
 	var req []models.SkillEntity
 	if err := c.ShouldBindJSON(&req); err != nil {

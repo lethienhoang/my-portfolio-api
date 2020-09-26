@@ -4,6 +4,8 @@ import (
 	"errors"
 	"my-portfolio-api/models"
 	"my-portfolio-api/repositories"
+
+	uuid "github.com/satori/go.uuid"
 )
 
 // EducationService respresents certificate repo, service
@@ -27,6 +29,26 @@ func (sv *EducationService) GetEducations() ([]models.EducationEntity, error) {
 
 	if len(entity) == 0 {
 		return nil, errors.New("education is not found")
+	}
+
+	return entity, nil
+}
+
+// UpdateEducations update data into db
+func (sv *EducationService) UpdateEducations(id uuid.UUID, model *models.EducationEntity) (*models.EducationEntity, error) {
+	entity, err := sv.educationRepo.Update(id, model)
+	if err != nil {
+		return nil, err
+	}
+
+	return entity, nil
+}
+
+// InsertEducations insert data into db
+func (sv *EducationService) InsertEducations(model *models.EducationEntity) (*models.EducationEntity, error) {
+	entity, err := sv.educationRepo.Insert(model)
+	if err != nil {
+		return nil, err
 	}
 
 	return entity, nil
