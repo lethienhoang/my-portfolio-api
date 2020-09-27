@@ -26,8 +26,6 @@ func GetCertificates(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
-	defer dbContext.Close()
-
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)
 
@@ -63,8 +61,6 @@ func UpdateCertificates(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
-	defer dbContext.Close()
-
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)
 
@@ -95,8 +91,6 @@ func InsertCertificates(c *gin.Context) {
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
-
-	defer dbContext.Close()
 
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)

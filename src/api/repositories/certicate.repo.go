@@ -4,8 +4,8 @@ import (
 	"my-portfolio-api/models"
 	"my-portfolio-api/utils/channels"
 
-	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // CertificateRepository is the struct for Certificate bussiness
@@ -26,7 +26,7 @@ func (repo *CertificateRepository) Update(id uuid.UUID, model *models.Certificat
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&model).Where("Id=?", id).Update(&model).Error
+		err = repo.db.Model(&models.CertificateEntity{}).Where("id=?", id).First(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -50,7 +50,7 @@ func (repo *CertificateRepository) Insert(model *models.CertificateEntity) (*mod
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Create(&model).Error
+		err = repo.db.Model(&models.CertificateEntity{}).Create(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -75,7 +75,7 @@ func (repo *CertificateRepository) GetAll() ([]models.CertificateEntity, error) 
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Find(&model).Error
+		err = repo.db.Model(&models.CertificateEntity{}).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return

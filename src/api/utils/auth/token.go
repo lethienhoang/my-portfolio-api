@@ -16,7 +16,7 @@ import (
 )
 
 // GenerateJWT creates a new token to the client
-func GenerateJWT(userid uuid.UUID) (*models.Token, error) {
+func GenerateJWT(userid string) (*models.Token, error) {
 	td := &models.Token{}
 	td.AtExpires = time.Now().Add(time.Minute * 15).Unix()
 	td.AccessUUID = uuid.NewV4().String()

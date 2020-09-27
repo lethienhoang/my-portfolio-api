@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // UserService contain UserRepository
@@ -63,8 +64,10 @@ func (sv *UserService) SignUp(email, password string) error {
 		return err
 	}
 
-	if err := sv.repo.ExistEmail(email); err != nil {
-		return err
+	checkEmail := sv.repo.ExistEmail(email)
+
+	if !errors.Is(checkEmail, gorm.ErrRecordNotFound) {
+		return errors.New("email is exist")
 	}
 
 	newPass, err := security.Hash(password)

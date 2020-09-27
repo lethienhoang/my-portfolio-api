@@ -9,11 +9,11 @@ import (
 )
 
 // StoreTokenToRedis store access token or refresh token to redis
-func StoreTokenToRedis(userid uuid.UUID, token *models.Token) error {
+func StoreTokenToRedis(userid string, token *models.Token) error {
 	at := time.Unix(token.AtExpires, 0)
 	now := time.Now()
 
-	_, err := redisserver.REDISCLIENT.Set(token.AccessUUID, userid.String(), at.Sub(now)).Result()
+	_, err := redisserver.REDISCLIENT.Set(token.AccessUUID, userid, at.Sub(now)).Result()
 	if err != nil {
 		return err
 	}

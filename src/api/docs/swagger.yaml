@@ -115,6 +115,62 @@ paths:
               type: string
             type: object
       summary: Show a account
+    post:
+      consumes:
+      - application/json
+      description: get certificates
+      parameters:
+      - description: Certificate
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.CertificateEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CertificateEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show a account
+  /certificates/{:id}:
+    put:
+      consumes:
+      - application/json
+      description: get certificates
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Certificate
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.CertificateEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.CertificateEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Show a account
   /educations:
     get:
       consumes:
@@ -137,8 +193,97 @@ paths:
             additionalProperties:
               type: string
             type: object
+    post:
+      consumes:
+      - application/json
+      description: get educations
+      parameters:
+      - description: Education
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.EducationEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EducationEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+  /educations/{:id}:
+    put:
+      consumes:
+      - application/json
+      description: get educations
+      parameters:
+      - description: ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Education
+        in: body
+        name: req
+        required: true
+        schema:
+          $ref: '#/definitions/models.EducationEntity'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.EducationEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
   /profile:
     get:
+      consumes:
+      - application/json
+      description: get my profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProfileEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+    post:
+      consumes:
+      - application/json
+      description: get my profile
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.ProfileEntity'
+        "422":
+          description: Unprocessable Entity
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+  /profile/{:id}:
+    put:
       consumes:
       - application/json
       description: get my profile
@@ -199,6 +344,7 @@ paths:
             additionalProperties:
               type: string
             type: object
+  /skills/{:id}:
     put:
       consumes:
       - application/json
@@ -283,7 +429,7 @@ paths:
               type: string
             type: object
   /skills/bulk:
-    post:
+    put:
       consumes:
       - application/json
       description: insert skills to database

@@ -25,7 +25,7 @@ func Run() {
 // Listen run route, port
 func Listen(port int) {
 	g := gin.New()
-	v1 := g.Group("/api/v1")
+	v1 := g.Group("/v1/api")
 
 	routes.SetupRoutesWithMiddleware(v1)
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

@@ -4,8 +4,8 @@ import (
 	"my-portfolio-api/models"
 	"my-portfolio-api/utils/channels"
 
-	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 type UserRepository struct {
@@ -96,7 +96,7 @@ func (repo *UserRepository) UpdatePassword(id uuid.UUID, password string) error 
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.UserEntity{}).Where("Id=?", id).Update("Password", password).Error
+		err = repo.db.Model(&models.UserEntity{}).Where("id=?", id).Update("Password", password).Error
 		if err != nil {
 			ch <- false
 			return

@@ -4,8 +4,8 @@ import (
 	"my-portfolio-api/models"
 	"my-portfolio-api/utils/channels"
 
-	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // SkillRepository is the struct for kill bussiness
@@ -26,7 +26,7 @@ func (repo *SkillRepository) Update(id uuid.UUID, model *models.SkillEntity) (*m
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.SkillEntity{}).Omit("ID").Where("ID=?", id).Update(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Omit("id").Where("id=?", id).First(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -99,7 +99,7 @@ func (repo *SkillRepository) GetByType(skillType string) ([]models.SkillEntity, 
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.SkillEntity{}).Where("Type=?", skillType).Find(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("type=?", skillType).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -124,7 +124,7 @@ func (repo *SkillRepository) GetByManufacturer(manufacturerType string) ([]model
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.SkillEntity{}).Where("Manufacturer=?", manufacturerType).Find(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("manufacturer=?", manufacturerType).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -174,7 +174,7 @@ func (repo *SkillRepository) GetByID(id uuid.UUID) (models.SkillEntity, error) {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.SkillEntity{}).Where("ID=?", id).Take(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Where("id=?", id).Take(&model).Error
 		if err != nil {
 			ch <- false
 			return

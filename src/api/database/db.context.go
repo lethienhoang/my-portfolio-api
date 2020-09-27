@@ -1,11 +1,13 @@
 package database
 
 import (
+	"database/sql"
 	"log"
 	"my-portfolio-api/config"
 	"my-portfolio-api/models"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/driver/postgres"
+	"gorm.io/gorm"
 )
 
 // DbContext is the struct
@@ -15,13 +17,17 @@ type DbContext struct {
 
 // ConnectDb connect database
 func ConnectDb() (*DbContext, error) {
-	db, err := gorm.Open(config.DBDRIVER, config.DBURL)
+	sqlStr, err := sql.Open(config.DBDRIVER, config.DBURL)
+
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		// DSN:        config.DBURL,
+		// DriverName: config.DBDRIVER,
+		Conn: sqlStr,
+	}), &gorm.Config{})
+
 	if err != nil {
-		log.Fatal(err)
 		return nil, err
 	}
-
-	db.LogMode(true)
 
 	err = Automigrate(db)
 	if err != nil {
@@ -39,11 +45,6 @@ func (d *DbContext) GetDbContext() *gorm.DB {
 	return d.db
 }
 
-// Close closes connection to db
-func (d *DbContext) Close() error {
-	return d.db.Close()
-}
-
 // Automigrate migariton model schema
 func Automigrate(db *gorm.DB) error {
 	return db.AutoMigrate(&models.SkillEntity{},
@@ -51,5 +52,5 @@ func Automigrate(db *gorm.DB) error {
 		&models.EducationEntity{},
 		&models.CertificateEntity{},
 		&models.UserEntity{},
-		&models.SkillEntity{}).Error
+		&models.SkillEntity{})
 }

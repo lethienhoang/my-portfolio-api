@@ -4,8 +4,8 @@ import (
 	"my-portfolio-api/models"
 	"my-portfolio-api/utils/channels"
 
-	"github.com/jinzhu/gorm"
 	uuid "github.com/satori/go.uuid"
+	"gorm.io/gorm"
 )
 
 // EducationRepository is the struct for Education bussiness
@@ -26,7 +26,7 @@ func (repo *EducationRepository) Update(id uuid.UUID, model *models.EducationEnt
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&model).Where("Id=?", id).Update(&model).Error
+		err = repo.db.Model(&models.EducationEntity{}).Where("id=?", id).First(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -50,7 +50,7 @@ func (repo *EducationRepository) Insert(model *models.EducationEntity) (*models.
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Create(&model).Error
+		err = repo.db.Model(&models.EducationEntity{}).Create(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -75,7 +75,7 @@ func (repo *EducationRepository) GetAll() ([]models.EducationEntity, error) {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Find(&model).Error
+		err = repo.db.Model(&models.EducationEntity{}).Find(&model).Error
 		if err != nil {
 			ch <- false
 			return

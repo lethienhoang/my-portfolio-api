@@ -6,7 +6,7 @@ import (
 
 	uuid "github.com/satori/go.uuid"
 
-	"github.com/jinzhu/gorm"
+	"gorm.io/gorm"
 )
 
 // ProfileRepository is the struct for Profile bussiness
@@ -27,12 +27,13 @@ func (repo *ProfileRepository) Update(id uuid.UUID, model *models.ProfileEntity)
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&model).Where("Id=?", id).Update(&model).Error
+		err = repo.db.Model(&models.ProfileEntity{}).Where("id=?", id).First(&model).Error
 		if err != nil {
 			ch <- false
 			return
 		}
 
+		repo.db.Model(&models.ProfileEntity{}).Save(model)
 		ch <- true
 	}(done)
 
@@ -51,7 +52,7 @@ func (repo *ProfileRepository) Insert(model *models.ProfileEntity) (*models.Prof
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Create(&model).Error
+		err = repo.db.Model(&models.ProfileEntity{}).Create(&model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -76,7 +77,7 @@ func (repo *ProfileRepository) Get() (*models.ProfileEntity, error) {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Take(&model).Error
+		err = repo.db.Model(&models.ProfileEntity{}).Take(&model).Error
 		if err != nil {
 			ch <- false
 			return

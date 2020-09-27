@@ -7,6 +7,8 @@ import (
 	"my-portfolio-api/utils/responses"
 	"net/http"
 
+	"github.com/gin-gonic/gin/binding"
+
 	uuid "github.com/satori/go.uuid"
 
 	"github.com/gin-gonic/gin"
@@ -25,9 +27,8 @@ func SignIn(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	defer dbContext.Close()
 
 	email, _ := c.GetPostForm("email")
 	password, _ := c.GetPostForm("password")
@@ -40,11 +41,11 @@ func SignIn(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 	}
 
-	tokens := map[string]string{
+	res := map[string]string{
 		"access_token": token,
 	}
 
-	responses.OK(c, tokens)
+	responses.OK(c, res)
 }
 
 // SignUp godoc
@@ -60,12 +61,17 @@ func SignUp(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
-	defer dbContext.Close()
+	var req map[string]string
+	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
+		responses.ERROR(c, http.StatusBadRequest, err)
+		return
+	}
 
-	email, _ := c.GetPostForm("email")
-	password, _ := c.GetPostForm("password")
+	email := req["email"]
+	password := req["password"]
 
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
@@ -73,6 +79,7 @@ func SignUp(c *gin.Context) {
 	err = service.SignUp(email, password)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	res := map[string]string{
@@ -94,9 +101,8 @@ func SignOut(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	defer dbContext.Close()
 
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
@@ -104,6 +110,7 @@ func SignOut(c *gin.Context) {
 	err = service.SignOut(c)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	res := map[string]string{
@@ -127,9 +134,8 @@ func UpdatePassword(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	defer dbContext.Close()
 
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
@@ -140,6 +146,7 @@ func UpdatePassword(c *gin.Context) {
 	err = service.UpdateUserPassword(id, pass)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	res := map[string]string{

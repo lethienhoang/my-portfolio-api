@@ -32,9 +32,10 @@ func Load() {
 	user := os.Getenv("DB_USER")
 	dbname := os.Getenv("DB_NAME")
 	password := os.Getenv("DB_PASSWORD")
+	port := os.Getenv("DB_PORT")
 
 	DBDRIVER = os.Getenv("DB_DRIVER")
-	DBURL = fmt.Sprintf("host=%s user=%s dbname=%s sslmode=disable password=%s", host, user, dbname, password)
+	DBURL = fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, dbname)
 
 	ISSUER = os.Getenv("ISSUER")
 	SECRETKEY = []byte(os.Getenv("API_SECRET"))

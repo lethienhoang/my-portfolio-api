@@ -7,13 +7,19 @@ import (
 )
 
 // OK represents a response successfully
-func OK(r *gin.Context, data interface{}) {
-	r.JSON(http.StatusOK, data)
+func OK(r *gin.Context, item interface{}) {
+	r.JSON(http.StatusOK, gin.H{
+		"data": item,
+	})
 }
 
 // ERROR represents a response failure
 func ERROR(r *gin.Context, statusCode int, err error) {
+	res := map[string]string{
+		"message": string(err.Error()),
+	}
+
 	r.JSON(statusCode, gin.H{
-		"errors": string(err.Error()),
+		"data": res,
 	})
 }
