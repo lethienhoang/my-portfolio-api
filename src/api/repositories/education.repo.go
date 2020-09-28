@@ -26,7 +26,7 @@ func (repo *EducationRepository) Update(id uuid.UUID, model *models.EducationEnt
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.EducationEntity{}).Where("id=?", id).First(&model).Error
+		err = repo.db.Model(&models.EducationEntity{}).Where("id=?", id).First(model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -50,7 +50,7 @@ func (repo *EducationRepository) Insert(model *models.EducationEntity) (*models.
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.EducationEntity{}).Create(&model).Error
+		err = repo.db.Model(&models.EducationEntity{}).Create(model).Error
 		if err != nil {
 			ch <- false
 			return

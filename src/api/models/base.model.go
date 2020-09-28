@@ -8,21 +8,24 @@ import (
 )
 
 type BaseEntity struct {
-	ID        string    `gorm:"type:uuid;primary_key;"`
+	ID        uuid.UUID `gorm:"type:uuid;primary_key;column:id"`
 	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
 	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
 }
 
-func (base *BaseEntity) BeforeCreate(tx *gorm.DB) {
+func (base *BaseEntity) BeforeCreate(tx *gorm.DB) (err error) {
 	newUUID := uuid.NewV4()
-	base.ID = newUUID.String()
+	base.ID = newUUID
+	return
 }
 
-func (base *BaseEntity) BeforeSave(tx *gorm.DB) {
+func (base *BaseEntity) BeforeSave(tx *gorm.DB) (err error) {
 	base.CreatedAt = time.Now()
 	base.UpdatedAt = time.Now()
+	return
 }
 
-func (base *BaseEntity) BeforeUpdate(tx *gorm.DB) {
+func (base *BaseEntity) BeforeUpdate(tx *gorm.DB) (err error) {
 	base.UpdatedAt = time.Now()
+	return
 }

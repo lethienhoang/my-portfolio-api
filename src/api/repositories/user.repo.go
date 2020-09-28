@@ -49,7 +49,7 @@ func (repo *UserRepository) Insert(model *models.UserEntity) error {
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.UserEntity{}).Select("Email", "Password").Create(&model).Error
+		err = repo.db.Model(&models.UserEntity{}).Create(model).Error
 		if err != nil {
 			ch <- false
 			return

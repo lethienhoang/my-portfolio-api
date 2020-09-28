@@ -13,6 +13,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/go-redis/redis/v7 v7.4.0 // indirect
 	github.com/joho/godotenv v1.3.0
+	github.com/lib/pq v1.3.0
 	github.com/mailru/easyjson v0.7.6 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.6.0

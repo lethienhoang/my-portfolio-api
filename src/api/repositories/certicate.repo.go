@@ -26,7 +26,7 @@ func (repo *CertificateRepository) Update(id uuid.UUID, model *models.Certificat
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.CertificateEntity{}).Where("id=?", id).First(&model).Error
+		err = repo.db.Model(&models.CertificateEntity{}).Where("id=?", id).First(model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -50,7 +50,7 @@ func (repo *CertificateRepository) Insert(model *models.CertificateEntity) (*mod
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.CertificateEntity{}).Create(&model).Error
+		err = repo.db.Model(&models.CertificateEntity{}).Create(model).Error
 		if err != nil {
 			ch <- false
 			return

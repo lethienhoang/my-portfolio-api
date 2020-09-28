@@ -27,7 +27,7 @@ func (repo *ProfileRepository) Update(id uuid.UUID, model *models.ProfileEntity)
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.ProfileEntity{}).Where("id=?", id).First(&model).Error
+		err = repo.db.Model(&models.ProfileEntity{}).Where("id=?", id).First(model).Error
 		if err != nil {
 			ch <- false
 			return
@@ -52,7 +52,7 @@ func (repo *ProfileRepository) Insert(model *models.ProfileEntity) (*models.Prof
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.ProfileEntity{}).Create(&model).Error
+		err = repo.db.Model(&models.ProfileEntity{}).Create(model).Error
 		if err != nil {
 			ch <- false
 			return

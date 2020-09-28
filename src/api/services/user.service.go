@@ -41,12 +41,12 @@ func (sv *UserService) SignIn(email, password string) (string, error) {
 		return "", errors.New("Password incorrect")
 	}
 
-	token, err := auth.GenerateJWT(entity.ID)
+	token, err := auth.GenerateJWT(entity.ID.String())
 	if err != nil {
 		return "", errors.New("Generate token failed")
 	}
 
-	if err := StoreTokenToRedis(entity.ID, token); err != nil {
+	if err := StoreTokenToRedis(entity.ID.String(), token); err != nil {
 		return "", errors.New("Insert token failed")
 	}
 

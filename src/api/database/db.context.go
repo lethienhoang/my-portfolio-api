@@ -6,6 +6,7 @@ import (
 	"my-portfolio-api/config"
 	"my-portfolio-api/models"
 
+	_ "github.com/lib/pq"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
