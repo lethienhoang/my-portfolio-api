@@ -2,7 +2,6 @@ package database
 
 import (
 	"database/sql"
-	"log"
 	"my-portfolio-api/config"
 	"my-portfolio-api/models"
 
@@ -30,11 +29,11 @@ func ConnectDb() (*DbContext, error) {
 		return nil, err
 	}
 
-	err = Automigrate(db)
-	if err != nil {
-		log.Fatal(err)
-		return nil, err
-	}
+	// err = Automigrate(db)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// 	return nil, err
+	// }
 
 	return &DbContext{
 		db: db,
@@ -44,6 +43,21 @@ func ConnectDb() (*DbContext, error) {
 // GetDbContext gets gorm.DB
 func (d *DbContext) GetDbContext() *gorm.DB {
 	return d.db
+}
+
+// Close gets gorm.DB
+func (d *DbContext) Close() error {
+	db, err := d.db.DB()
+	if err != nil {
+		return err
+	}
+
+	return db.Close()
+}
+
+// Migration migariton model schema
+func (d *DbContext) Migration() error {
+	return Automigrate(d.db)
 }
 
 // Automigrate migariton model schema

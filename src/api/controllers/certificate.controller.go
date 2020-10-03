@@ -27,6 +27,8 @@ func GetCertificates(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)
 
@@ -65,6 +67,8 @@ func UpdateCertificates(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)
 
@@ -73,6 +77,8 @@ func UpdateCertificates(c *gin.Context) {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	responses.OK(c, results)
 }
@@ -98,6 +104,8 @@ func InsertCertificates(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
 	service := services.NewCertificateService(repo)

@@ -8,9 +8,9 @@ import (
 )
 
 type BaseEntity struct {
-	ID        uuid.UUID `gorm:"type:uuid;primary_key;column:id"`
-	CreatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
-	UpdatedAt time.Time `gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
+	ID        uuid.UUID `json:"id"; gorm:"type:uuid;primary_key;column:id"`
+	CreatedAt time.Time `json:"created_at"; gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
+	UpdatedAt time.Time `json:"updated_at"; gorm:"default:CURRENT_TIMESTAMP";swaggerignore:"true"`
 }
 
 func (base *BaseEntity) BeforeCreate(tx *gorm.DB) (err error) {

@@ -155,7 +155,7 @@ var doc = `{
         },
         "/educations": {
             "get": {
-                "description": "get educations",
+                "description": "check api healthcheck",
                 "consumes": [
                     "application/json"
                 ],
@@ -166,12 +166,9 @@ var doc = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/definitions/models.EducationEntity"
-                                }
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
                             }
                         }
                     },
@@ -794,19 +791,19 @@ var doc = `{
                 "authority": {
                     "type": "string"
                 },
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "id": {
                     "type": "string"
                 },
-                "issueDate": {
+                "issue_date": {
                     "type": "string"
                 },
                 "name": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 },
                 "url": {
@@ -817,16 +814,16 @@ var doc = `{
         "models.EducationEntity": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "degree": {
                     "type": "string"
                 },
-                "endDate": {
+                "end_date": {
                     "type": "string"
                 },
-                "fieldOfStudy": {
+                "field_of_study": {
                     "type": "string"
                 },
                 "grade": {
@@ -838,10 +835,10 @@ var doc = `{
                 "name": {
                     "type": "string"
                 },
-                "startDate": {
+                "start_date": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -849,7 +846,7 @@ var doc = `{
         "models.ProfileEntity": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "description": {
@@ -858,7 +855,7 @@ var doc = `{
                 "email": {
                     "type": "string"
                 },
-                "fullName": {
+                "full_name": {
                     "type": "string"
                 },
                 "gender": {
@@ -867,13 +864,13 @@ var doc = `{
                 "id": {
                     "type": "string"
                 },
-                "imgURL": {
+                "img_url": {
                     "type": "string"
                 },
                 "level": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 }
             }
@@ -881,7 +878,7 @@ var doc = `{
         "models.SkillEntity": {
             "type": "object",
             "properties": {
-                "createdAt": {
+                "created_at": {
                     "type": "string"
                 },
                 "experiences": {
@@ -893,7 +890,7 @@ var doc = `{
                 "level": {
                     "type": "integer"
                 },
-                "manufacturer": {
+                "manfacturer": {
                     "type": "string"
                 },
                 "name": {
@@ -902,7 +899,7 @@ var doc = `{
                 "type": {
                     "type": "string"
                 },
-                "updatedAt": {
+                "updated_at": {
                     "type": "string"
                 }
             }

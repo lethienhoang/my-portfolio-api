@@ -30,6 +30,8 @@ func SignIn(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	email, _ := c.GetPostForm("email")
 	password, _ := c.GetPostForm("password")
 
@@ -64,6 +66,8 @@ func SignUp(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	var req map[string]string
 	if err := c.ShouldBindBodyWith(&req, binding.JSON); err != nil {
@@ -105,6 +109,8 @@ func SignOut(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)
 
@@ -137,6 +143,8 @@ func UpdatePassword(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewUserRepository(dbContext.GetDbContext())
 	service := services.NewUserService(repo)

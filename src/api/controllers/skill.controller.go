@@ -27,6 +27,8 @@ func GetSkills(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
 
@@ -60,6 +62,8 @@ func GetSkillByType(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
 
@@ -92,6 +96,8 @@ func GetSkillsByManufacturer(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -133,6 +139,8 @@ func Update(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
 
@@ -166,6 +174,8 @@ func Insert(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
 
@@ -198,6 +208,8 @@ func BulkInsert(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)

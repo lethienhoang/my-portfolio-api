@@ -8,12 +8,12 @@ import (
 // EducationEntity validates the inputs
 type EducationEntity struct {
 	BaseEntity
-	Name         string    `gorm:"size:30"`
-	StartDate    time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	EndDate      time.Time `gorm:"default:CURRENT_TIMESTAMP"`
-	FieldOfStudy string    `gorm:"size:30"`
-	Degree       string    `gorm:"size:50"`
-	Grade        string    `gorm:"size:15"`
+	Name         string    `json:"name"; gorm:"size:30"`
+	StartDate    time.Time `json:"start_date"; gorm:"default:CURRENT_TIMESTAMP"`
+	EndDate      time.Time `json:"end_date"; gorm:"default:CURRENT_TIMESTAMP"`
+	FieldOfStudy string    `json:"field_of_study"; gorm:"size:30"`
+	Degree       string    `json:"degree"; gorm:"size:50"`
+	Grade        string    `json:"grade"; gorm:"size:15"`
 }
 
 // Validate validates the inputs

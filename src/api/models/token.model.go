@@ -1,7 +1,7 @@
 package models
 
 type Token struct {
-	AccessToken string
-	AccessUUID  string
-	AtExpires   int64
+	AccessToken string `json:"access_token"`
+	AccessUUID  string `json:"access_id"`
+	AtExpires   int64  `json:"at_expires"`
 }

@@ -30,6 +30,8 @@ func GetProfile(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
 
@@ -71,6 +73,8 @@ func UpdateProfile(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
 
@@ -102,6 +106,8 @@ func InsertProfile(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)

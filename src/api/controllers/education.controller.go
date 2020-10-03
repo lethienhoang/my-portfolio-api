@@ -26,6 +26,8 @@ func GetEducations(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
 
@@ -63,6 +65,8 @@ func UpdateEducations(c *gin.Context) {
 		return
 	}
 
+	defer dbContext.Close()
+
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
 
@@ -95,6 +99,8 @@ func InsertEducations(c *gin.Context) {
 		responses.ERROR(c, http.StatusInternalServerError, err)
 		return
 	}
+
+	defer dbContext.Close()
 
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)

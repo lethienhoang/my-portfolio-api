@@ -5,12 +5,12 @@ import "errors"
 // ProfileEntity model
 type ProfileEntity struct {
 	BaseEntity
-	FullName    string `gorm:"size:20;not null;"`
-	Level       string `gorm:"size:20;not null;"`
-	ImgURL      string `gorm:"size:255"`
-	Description string `gorm:"size:255"`
-	Gender      string `gorm:"size:10"`
-	Email       string `gorm:"size:20"`
+	FullName    string `json:"full_name"; gorm:"size:20;not null;"`
+	Level       string `json:"level"; gorm:"size:20;not null;"`
+	ImgURL      string `json:"img_url"; gorm:"size:255"`
+	Description string `json:"description"; gorm:"size:255"`
+	Gender      string `json:"gender"; gorm:"size:10"`
+	Email       string `json:"email"; gorm:"size:20"`
 }
 
 // Validate validates the inputs

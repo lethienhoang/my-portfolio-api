@@ -12,8 +12,8 @@ import (
 // User model
 type UserEntity struct {
 	BaseEntity
-	Email    string `gorm:"size:100;not null;unique" json:"email"`
-	Password string `gorm:"size:60;not null" json:"password,omitempty"`
+	Email    string `json:"email"; gorm:"size:100;not null;unique"`
+	Password string `json:"password,omitempty"; gorm:"size:60;not null"`
 }
 
 // BeforeSave hash the user password

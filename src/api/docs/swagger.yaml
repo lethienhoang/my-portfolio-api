@@ -4,28 +4,28 @@ definitions:
     properties:
       authority:
         type: string
-      createdAt:
+      created_at:
         type: string
       id:
         type: string
-      issueDate:
+      issue_date:
         type: string
       name:
         type: string
-      updatedAt:
+      updated_at:
         type: string
       url:
         type: string
     type: object
   models.EducationEntity:
     properties:
-      createdAt:
+      created_at:
         type: string
       degree:
         type: string
-      endDate:
+      end_date:
         type: string
-      fieldOfStudy:
+      field_of_study:
         type: string
       grade:
         type: string
@@ -33,35 +33,35 @@ definitions:
         type: string
       name:
         type: string
-      startDate:
+      start_date:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
   models.ProfileEntity:
     properties:
-      createdAt:
+      created_at:
         type: string
       description:
         type: string
       email:
         type: string
-      fullName:
+      full_name:
         type: string
       gender:
         type: string
       id:
         type: string
-      imgURL:
+      img_url:
         type: string
       level:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
   models.SkillEntity:
     properties:
-      createdAt:
+      created_at:
         type: string
       experiences:
         type: number
@@ -69,13 +69,13 @@ definitions:
         type: string
       level:
         type: integer
-      manufacturer:
+      manfacturer:
         type: string
       name:
         type: string
       type:
         type: string
-      updatedAt:
+      updated_at:
         type: string
     type: object
 host: localhost:8888
@@ -175,18 +175,16 @@ paths:
     get:
       consumes:
       - application/json
-      description: get educations
+      description: check api healthcheck
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            items:
-              items:
-                $ref: '#/definitions/models.EducationEntity'
-              type: array
-            type: array
+            additionalProperties:
+              type: string
+            type: object
         "422":
           description: Unprocessable Entity
           schema:

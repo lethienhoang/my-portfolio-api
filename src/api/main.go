@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"my-portfolio-api/config"
+	"my-portfolio-api/database"
 	_ "my-portfolio-api/docs"
 	"my-portfolio-api/routes"
 
@@ -30,6 +31,22 @@ func Listen(port int) {
 	routes.SetupRoutesWithMiddleware(v1)
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	g.Run(fmt.Sprintf(":%d", port))
+}
+
+// Db run migration when app is started
+func Db() {
+	db, _ := database.ConnectDb()
+
+	var err error
+	err = db.Migration()
+	if err != nil {
+		panic(err)
+	}
+
+	err = db.Close()
+	if err != nil {
+		panic(err)
+	}
 }
 
 // @title Swagger Example API
@@ -78,4 +95,5 @@ func Listen(port int) {
 // @x-extension-openapi {"example": "value on a json format"}
 func main() {
 	Run()
+	Db()
 }
