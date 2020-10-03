@@ -2,12 +2,19 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"my-portfolio-api/config"
 	"my-portfolio-api/database"
 	_ "my-portfolio-api/docs"
+	"my-portfolio-api/middlewares"
 	"my-portfolio-api/routes"
+	"os"
+	"path"
+	"path/filepath"
+	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sirupsen/logrus"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
@@ -19,16 +26,17 @@ func init() {
 
 // Run message
 func Run() {
+	g := gin.New()
+	v1 := g.Group("/v1/api")
+	Middleware(v1)
+	Db()
+
 	fmt.Printf("\n\tListening [::]:%d", config.PORT)
-	Listen(config.PORT)
+	Listen(config.PORT, g)
 }
 
 // Listen run route, port
-func Listen(port int) {
-	g := gin.New()
-	v1 := g.Group("/v1/api")
-
-	routes.SetupRoutesWithMiddleware(v1)
+func Listen(port int, g *gin.Engine) {
 	g.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	g.Run(fmt.Sprintf(":%d", port))
 }
@@ -49,6 +57,32 @@ func Db() {
 	}
 }
 
+//Middleware use middleware in pipline of each request
+func Middleware(g *gin.RouterGroup) {
+	var err error
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var log = logrus.New()
+	logFileName := time.Now().UTC().Format("2006-01-02") + "-log.log"
+	fileName := path.Join(dir, "/logs/"+logFileName)
+
+	var f *os.File
+
+	f, err = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
+	if err != nil {
+		fmt.Println("error: ", err)
+	}
+
+	log.SetOutput(f)
+	g.Use(middlewares.LoggerMiddleware(log))
+	g.Use(middlewares.CORSMiddleware())
+	g.Use(middlewares.JSONMiddlware())
+	routes.SetupRoutesWithMiddleware(g)
+}
+
 // @title Swagger Example API
 // @version 1.0
 // @description This is a sample server celler server.
@@ -62,7 +96,7 @@ func Db() {
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8888
-// @BasePath /api/v1
+// @BasePath /v1/api
 // @query.collection.format multi
 
 // @securityDefinitions.basic BasicAuth
@@ -95,5 +129,4 @@ func Db() {
 // @x-extension-openapi {"example": "value on a json format"}
 func main() {
 	Run()
-	Db()
 }

@@ -4,7 +4,6 @@ import (
 	"my-portfolio-api/middlewares"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sirupsen/logrus"
 )
 
 // Route contain route fields
@@ -36,12 +35,7 @@ func Load() []Route {
 
 // SetupRoutesWithMiddleware setup middleware for routes or otherwise
 func SetupRoutesWithMiddleware(g *gin.RouterGroup) {
-	var log = logrus.New()
 	for _, route := range Load() {
-		g.Use(middlewares.CORSMiddleware())
-		g.Use(middlewares.JSONMiddlware())
-		g.Use(middlewares.LoggerMiddleware(log))
-
 		if route.AuthRequired {
 			authorized := g.Group("/")
 			// define authen here

@@ -2,9 +2,6 @@ package middlewares
 
 import (
 	"context"
-	"fmt"
-	"os"
-	"path"
 	"time"
 
 	"my-portfolio-api/utils/auth"
@@ -16,38 +13,8 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// LoggerMiddleware displays a info message of the API
-// func LoggerMiddleware() gin.HandlerFunc {
-// 	return func(c *gin.Context) {
-// 		log.Printf("%s %s%s %s", c.Request.Method, c.Request.Host, c.Request.RequestURI, c.Request.Proto)
-// 		c.Next()
-// 	}
-// }
-
 // LoggerMiddleware logs a gin HTTP request in JSON format
 func LoggerMiddleware(logger *logrus.Logger) gin.HandlerFunc {
-	logFileName := time.Now().UTC().Format("Jan-02-06") + "-log.log"
-	fileName := path.Dir("../logs/" + logFileName)
-
-	var f *os.File
-	var err error
-
-	// _, err = os.Stat(fileName)
-	// if os.IsNotExist(err) {
-	// 	f, err = os.Create(fileName)
-	// 	if err != nil {
-	// 		fmt.Println("error: ", err)
-	// 	}
-
-	// 	f.Close()
-	// }
-
-	f, err = os.OpenFile(fileName, os.O_WRONLY|os.O_APPEND|os.O_CREATE, 0644)
-	if err != nil {
-		fmt.Println("error: ", err)
-	}
-
-	logger.SetOutput(f)
 	logger.SetLevel(log.ErrorLevel)
 	logger.SetFormatter(&log.TextFormatter{})
 
@@ -59,18 +26,20 @@ func LoggerMiddleware(logger *logrus.Logger) gin.HandlerFunc {
 		// Process Request
 		c.Next()
 
-		entry := logger.WithFields(log.Fields{
-			"client_ip":  https.GetClientIP(c),
-			"duration":   start,
-			"method":     c.Request.Method,
-			"path":       c.Request.RequestURI,
-			"status":     c.Writer.Status(),
-			"user_id":    https.GetUserID(c),
-			"referrer":   c.Request.Referer(),
-			"request_id": c.Writer.Header().Get("Request-Id"),
-		})
+		if status := c.Writer.Status(); status != 200 {
+			entry := logger.WithFields(log.Fields{
+				"client_ip":  https.GetClientIP(c),
+				"duration":   start,
+				"method":     c.Request.Method,
+				"path":       c.Request.RequestURI,
+				"status":     c.Writer.Status(),
+				"referrer":   c.Request.Referer(),
+				"request_id": c.Writer.Header().Get("X-Request-Id"),
+				"user_id":    https.GetUserID(c),
+			})
 
-		entry.Error(c.Errors.String())
+			entry.Error(c.Errors.String())
+		}
 	}
 }
 
