@@ -24,9 +24,8 @@ func GetSkills(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -34,6 +33,7 @@ func GetSkills(c *gin.Context) {
 	skills, err := service.GetSkills()
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, skills)
@@ -51,14 +51,14 @@ func GetSkillByType(c *gin.Context) {
 	param, ok := c.GetQuery("type")
 	if ok == false {
 		responses.ERROR(c, http.StatusBadRequest, errors.New("Skill type is requried"))
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -66,6 +66,7 @@ func GetSkillByType(c *gin.Context) {
 	results, err := service.GetSkillByType(param)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -83,14 +84,14 @@ func GetSkillsByManufacturer(c *gin.Context) {
 	param, ok := c.GetQuery("manufacturer")
 	if ok == false {
 		responses.ERROR(c, http.StatusBadRequest, errors.New("manufacturer type is requried"))
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -98,6 +99,7 @@ func GetSkillsByManufacturer(c *gin.Context) {
 	results, err := service.GetSkillsByManufacturer(param)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -113,22 +115,23 @@ func GetSkillsByManufacturer(c *gin.Context) {
 // @Failure 422 {object} map[string]string
 // @Router /skills/{:id} [put]
 func Update(c *gin.Context) {
-	id, err := uuid.FromString(c.Query("id"))
+	id, err := uuid.FromString(c.Param("id"))
 	if err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	var req models.SkillEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -136,6 +139,7 @@ func Update(c *gin.Context) {
 	results, err := service.Update(id, &req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -153,14 +157,14 @@ func Insert(c *gin.Context) {
 	var req models.SkillEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -168,6 +172,7 @@ func Insert(c *gin.Context) {
 	results, err := service.Insert(&req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -185,14 +190,14 @@ func BulkInsert(c *gin.Context) {
 	var req []models.SkillEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewSkillRepository(dbContext.GetDbContext())
 	service := services.NewSkillService(repo)
@@ -200,6 +205,7 @@ func BulkInsert(c *gin.Context) {
 	results, err := service.BulkInsert(req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)

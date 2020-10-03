@@ -26,7 +26,7 @@ func (repo *SkillRepository) Update(id uuid.UUID, model *models.SkillEntity) (*m
 	go func(ch chan<- bool) {
 		defer close(ch)
 
-		err = repo.db.Model(&models.SkillEntity{}).Omit("id").Where("id=?", id).First(&model).Error
+		err = repo.db.Model(&models.SkillEntity{}).Omit("id").Where("id=?", id).Updates(&model).Error
 		if err != nil {
 			ch <- false
 			return

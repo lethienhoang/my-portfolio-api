@@ -39,6 +39,7 @@ func SignIn(c *gin.Context) {
 	token, err := service.SignIn(email, password)
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	res := map[string]string{

@@ -9,13 +9,13 @@ import (
 func SkillRoutes() []Route {
 	routes := []Route{
 		Route{
-			URI:          "/skills?type={type}",
+			URI:          "/skills?type=:type",
 			Method:       http.MethodGet,
 			Handler:      controllers.GetSkillByType,
 			AuthRequired: false,
 		},
 		Route{
-			URI:          "/skills?manufacturer={type}",
+			URI:          "/skills?manufacturer=:type",
 			Method:       http.MethodGet,
 			Handler:      controllers.GetSkillsByManufacturer,
 			AuthRequired: false,
@@ -27,7 +27,7 @@ func SkillRoutes() []Route {
 			AuthRequired: false,
 		},
 		Route{
-			URI:          "/skills",
+			URI:          "/skills/:id",
 			Method:       http.MethodPut,
 			Handler:      controllers.Update,
 			AuthRequired: true,

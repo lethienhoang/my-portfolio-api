@@ -8,7 +8,7 @@ import (
 
 // OK represents a response successfully
 func OK(r *gin.Context, item interface{}) {
-	r.JSON(http.StatusOK, gin.H{
+	r.AbortWithStatusJSON(http.StatusOK, gin.H{
 		"data": item,
 	})
 }
@@ -19,7 +19,7 @@ func ERROR(r *gin.Context, statusCode int, err error) {
 		"message": string(err.Error()),
 	}
 
-	r.JSON(statusCode, gin.H{
+	r.AbortWithStatusJSON(statusCode, gin.H{
 		"data": res,
 	})
 }

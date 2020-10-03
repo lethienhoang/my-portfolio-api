@@ -3,7 +3,6 @@ package middlewares
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"path"
 	"time"
@@ -105,7 +104,8 @@ func AuthMiddlware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		claim, ok := auth.TokenValid(c)
 		if ok != nil {
-			c.JSON(http.StatusUnauthorized, gin.H{"error": "User needs to be signed in to access this service"})
+			// c.AbortWithStatusJSON(http.StatusUnauthorized, gin.H{"error": "User needs to be signed in to access this service"})
+			return
 		}
 
 		ctx := context.WithValue(

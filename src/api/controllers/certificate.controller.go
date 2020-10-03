@@ -24,6 +24,7 @@ func GetCertificates(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
@@ -32,6 +33,7 @@ func GetCertificates(c *gin.Context) {
 	results, err := service.GetCertificates()
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -52,6 +54,7 @@ func UpdateCertificates(c *gin.Context) {
 	var err error
 	if err = c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	id, _ := uuid.FromString(c.Query("id"))
@@ -59,6 +62,7 @@ func UpdateCertificates(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
@@ -67,6 +71,7 @@ func UpdateCertificates(c *gin.Context) {
 	results, err := service.UpdateCertificates(id, &req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -85,11 +90,13 @@ func InsertCertificates(c *gin.Context) {
 	var req models.CertificateEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
 
 	repo := repositories.NewCertificateRepository(dbContext.GetDbContext())
@@ -98,6 +105,7 @@ func InsertCertificates(c *gin.Context) {
 	results, err := service.InsertCertificates(&req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)

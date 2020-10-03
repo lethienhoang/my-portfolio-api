@@ -27,9 +27,8 @@ func GetProfile(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
@@ -37,6 +36,7 @@ func GetProfile(c *gin.Context) {
 	results, err := service.GetProfile()
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -56,19 +56,20 @@ func UpdateProfile(c *gin.Context) {
 	var req models.ProfileEntity
 	if err = c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
-	id, err = uuid.FromString(c.Query("id"))
+	id, err = uuid.FromString(c.Param("id"))
 	if err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
@@ -76,6 +77,7 @@ func UpdateProfile(c *gin.Context) {
 	results, err := service.UpdateProfile(id, &req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -92,14 +94,14 @@ func InsertProfile(c *gin.Context) {
 	var req models.ProfileEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewProfileRepository(dbContext.GetDbContext())
 	service := services.NewProfileService(repo)
@@ -107,6 +109,7 @@ func InsertProfile(c *gin.Context) {
 	results, err := service.InsertProfile(&req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)

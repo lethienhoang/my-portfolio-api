@@ -23,9 +23,8 @@ func GetEducations(c *gin.Context) {
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
@@ -33,6 +32,7 @@ func GetEducations(c *gin.Context) {
 	results, err := service.GetEducations()
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -52,16 +52,16 @@ func UpdateEducations(c *gin.Context) {
 	var err error
 	if err = c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
-	id, _ := uuid.FromString(c.Query("id"))
+	id, _ := uuid.FromString(c.Param("id"))
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
@@ -69,6 +69,7 @@ func UpdateEducations(c *gin.Context) {
 	results, err := service.UpdateEducations(id, &req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
@@ -86,14 +87,14 @@ func InsertEducations(c *gin.Context) {
 	var req models.EducationEntity
 	if err := c.ShouldBindJSON(&req); err != nil {
 		responses.ERROR(c, http.StatusBadRequest, err)
+		return
 	}
 
 	dbContext, err := database.ConnectDb()
 	if err != nil {
 		responses.ERROR(c, http.StatusInternalServerError, err)
+		return
 	}
-
-	
 
 	repo := repositories.NewEducationRepository(dbContext.GetDbContext())
 	service := services.NewEducationService(repo)
@@ -101,6 +102,7 @@ func InsertEducations(c *gin.Context) {
 	results, err := service.InsertEducations(&req)
 	if err != nil {
 		responses.ERROR(c, http.StatusUnprocessableEntity, err)
+		return
 	}
 
 	responses.OK(c, results)
